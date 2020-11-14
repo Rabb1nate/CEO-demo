@@ -1,4 +1,5 @@
-import React, { Component,Fragment } from 'react'
+import React, { Component, Fragment } from 'react'
+import { Button } from 'antd';
 import { Input } from 'antd';
 import { Table } from 'antd';
 import reqwest from 'reqwest';
@@ -11,25 +12,37 @@ const { Search } = Input;
 // 定义表格的行
 const columns = [
   {
-    title: 'Name',
+    title: '学号',
     dataIndex: 'name',
     sorter: true,
     render: name => `${name.first} ${name.last}`,
     width: '20%',
   },
   {
-    title: 'Gender',
+    title: '姓名',
     dataIndex: 'gender',
-    filters: [
-      { text: 'Male', value: 'male' },
-      { text: 'Female', value: 'female' },
-    ],
     width: '20%',
   },
   {
-    title: 'Email',
+    title: '公司',
     dataIndex: 'email',
   },
+  {
+    title: '职位',
+    dataIndex: 'email',
+  },
+  {
+    title: '老师给分',
+    dataIndex: 'email',
+  },
+  {
+    title: '总分',
+    dataIndex: 'email',
+  },
+  {
+    title: '操作',
+    dataIndex: 'email',
+  }
 ];
 
 const getRandomuserParams = params => {
@@ -59,7 +72,7 @@ class StuInfo extends Component {
             data: [],
             pagination: {
             current: 1,
-            pageSize: 10,
+            pageSize: 30,
             },
             loading: false,
         };
@@ -108,15 +121,13 @@ class StuInfo extends Component {
         return (
             <Fragment>
                 <div>
-                    <Input placeholder="Basic usage" className="input"/>
-                    <Search
-                    className="input-search"
-                    placeholder="input search text"
-                    allowClear
-                    enterButton="Search"
-                    size="large"
-                    onSearch={onSearch}
-                    />
+                  <span className="title">学生信息</span>
+                  <span className='stu-search'>
+                      <Input placeholder="学号" className='input'/>
+                      <Input placeholder="姓名" className='input'/>
+                      <Button type="primary">搜索</Button>
+                  </span>
+                    
                     
 
                 </div>
@@ -125,9 +136,9 @@ class StuInfo extends Component {
                     <Table
                         columns={columns}
                         rowKey={record => record.login.uuid}
-                        // dataSource={data}
-                        // pagination={pagination}
-                        // loading={loading}
+                        dataSource={this.state.data}
+                        pagination={this.state.pagination}
+                        loading={this.state.loading}
                         onChange={this.handleTableChange}
                     />
                 </div>

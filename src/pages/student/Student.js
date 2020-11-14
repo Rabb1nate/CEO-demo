@@ -91,7 +91,7 @@ class Student extends Component {
 
     loginClick = () => {
       if(this.state.userId!==""&&this.state.password!==""){
-      this.props.login(this.state.userId,this.state.password)
+      this.props.login(this.state.userId,this.state.password,this.state.chooseType)
       // window.location="/CEO"
       // this.props.history.push("/CEO")
       }
@@ -134,6 +134,7 @@ class Student extends Component {
     }
     render() { 
       if(this.props.isLogin===false||this.props.isLogin===undefined){
+        
         return ( 
           <Layout>
   <Sider
@@ -239,6 +240,7 @@ class Student extends Component {
        );
       }
       else{
+            setInterval(this.props.Login_Check(),5000)
         return ( 
           <Layout>
   <Sider
@@ -293,8 +295,11 @@ class Student extends Component {
 }
 const mapDispatchToProps = (dispatch) => {
   return {
-    login:(userId,password)=> {
-      dispatch(actions.loginAction(userId,password))
+    login:(userId,password,type)=> {
+      dispatch(actions.loginAction(userId,password,type))
+    },
+    Login_Check:()=> {
+      dispatch(actions.Login_Check())
     },
   }
 }

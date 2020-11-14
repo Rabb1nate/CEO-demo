@@ -76,8 +76,11 @@ class ChosenClasses extends Component {
          this.onPageChange=this.onPageChange.bind(this)
     }
     shouldComponentUpdate(nextProps, nextState){
-        if(this.state!==nextState){
+        if(this.state!==nextState||this.props!==nextProps){
             return true
+        }
+        else {
+          return false
         }
     }
     onPageChange (page,pageSize) {

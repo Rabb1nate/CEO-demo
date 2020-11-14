@@ -1,10 +1,21 @@
 const actions = {
-    loginAction : (userId,password) => {
-        return {
-            type:"login",
-            payload:{        
-                userId:userId,
-                password:password
+    loginAction : (userId,password,type) => {
+        if(type==="学生"){
+            return {
+                type:"login",
+                payload:{        
+                    studentId:userId,
+                    password:password
+                }
+            }
+        }
+        else {
+            return {
+                type:"login",
+                payload:{
+                    teacherId:userId,
+                    password:password
+                }
             }
         }
     },
@@ -32,5 +43,23 @@ const actions = {
             type:"Login_Fail",
         }
     },
+    Login_Check: () => {
+        return {
+            type:"Login_Check",
+            payload:{
+                userId:localStorage.getItem("userId")
+            }
+        }
+    },
+    Login_Check_OK: () => {
+        return {
+            type:"Login_Check_OK",
+        }
+    },
+    Login_Check_NO: () => {
+        return {
+            type:"Login_Check_NO",
+        }
+    }
 }
 export default actions
