@@ -165,6 +165,7 @@
     ]
   },
   "devDependencies": {
+    "http-proxy-middleware": "^1.0.6",
     "sass-loader": "^8.0.2"
   }
 }
