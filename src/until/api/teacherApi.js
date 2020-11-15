@@ -146,7 +146,7 @@ function setScore(teacherId, studentId, teacherScore) {
     teacherId, studentId, teacherScore
   })
 }
-export default {
+export {
   selectedClassTeacher,
   unSelectedClassTeacher,
   addClass,

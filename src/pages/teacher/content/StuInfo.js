@@ -5,6 +5,8 @@ import { Table } from 'antd';
 import axios from 'axios';
 import { AudioOutlined } from '@ant-design/icons';
 import '../../teacher/style/ComInfo.css';
+import * as Teacher from '../../../until/api/teacherApi'
+// import { unSelectedClassTeacher} from '';
 
 const { Search } = Input;
 
@@ -51,7 +53,7 @@ const getRandomuserParams = params => {
     ...params,
   };
 };
-
+console.log(Teacher.unSelectedClassTeacher("hejh", 1));
 
 
 const suffix = (
@@ -112,7 +114,7 @@ class StuInfo extends Component {
                     <Table
                         columns={columns}
                         rowKey={record => record.login.uuid}
-                        // dataSource={this.state.data}
+                        dataSource={this.state.data}
                         // pagination={this.state.pagination}
                         // loading={this.state.loading}
                         onChange={this.handleTableChange}

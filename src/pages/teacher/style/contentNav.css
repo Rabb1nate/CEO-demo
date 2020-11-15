@@ -3,38 +3,9 @@
     height: 100vh;
 }
 .nav-div{
-    background-color: #232A3A;
-    width: 20%;
-}
-
-.nav:hover{
-    background-color: #7B7F89;
-    
-    cursor: pointer;
-}
-.nav-point{
-    background-color: #7B7F89;
-    border-left: 0.25vw solid #fff;
-    font-size: 15px;
-    padding: 2.5vh;
-    padding-left: 7vw;
-    color: white;
-}
-.nav{
-    font-size: 15px;
-    padding: 2.5vh;
-    padding-left: 7vw;
-    color: white;
-    
-}
-/* .nav-a{
-    color: white;
-} */
-/* .nav-a:visited{
-    border-left: 0.25vw solid #fff;
-} */
-.nav-a:hover{
-    color: white;
+    width: 30%;
+    height: 100vh;
+    background-color: white;
 }
 .content{
     width: 100%;
@@ -43,4 +14,8 @@
     border: 1px solid #ccc;
     border-radius: 12px;
     padding: 1%;
+    background-color: white;
+}
+body{
+    background-color: #F0F2F5;
 }

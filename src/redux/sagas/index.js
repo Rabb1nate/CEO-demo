@@ -6,7 +6,8 @@ export default function* defSaga(){
                 const action = yield select();
                 console.log("saga"+'aaaaaa'+action)
                 const res = yield call(Service.post,'/login/user', action.payload)
-            if (res.status==200){
+        if (res.status == 200) {
+                
                 yield put(actions.Login_Success(res.message,res.data))
                 localStorage.setItem("name",res.data.userName)
                 localStorage.setItem("userId",res.data.userId)
