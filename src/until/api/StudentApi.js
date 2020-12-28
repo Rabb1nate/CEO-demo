@@ -61,10 +61,5 @@ const StudentApi = {
                 ...payload
         })
     },
-    ShowCompanyMember : (payload) => {
-        return Service.post('/student/showCompanyMember',{
-                ...payload
-        })
-    },
 }
 export default StudentApi

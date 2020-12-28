@@ -59,8 +59,8 @@ class DeleteClass extends Component{
         )
     }
     componentDidMount(){
-        // let data = this.props.location.state;
-        this.changePage(this.props.teacherId,1);
+        console.log("delete");
+        this.changePage(localStorage.getItem("teachclass"),1);
     }
     changePage = (teacherId,currentPage) => {
         this.setState({
@@ -110,7 +110,7 @@ class DeleteClass extends Component{
         let dataList = [];
         let temp = {};
         for(let i=0;i<this.state.selectedRowKeys.length;i++){
-            temp.teacherId = this.props.teacherId;
+            temp.teacherId = localStorage.getItem("teachclass");
             console.log(this.state.selectedRowKeys[i]);
             temp.teachclass = this.state.selectedRowKeys[i];
             dataList.push(temp);

@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Table, Button, Menu, message} from 'antd'
+import { Button, Menu, message, Spin} from 'antd'
 import {
     BrowserRouter as Router,
     Switch,
@@ -19,7 +19,10 @@ class MenuClass extends Component{
             teacherId:"",
             teacherName:"",
             btucontent:"添加班级",
-            list:[]
+            list:[],
+            key:"",
+            thisVisible:true,
+            loading:false
         }
         this.changeBtnContent = this.changeBtnContent.bind(this);
         this.getTeachClassList = this.getTeachClassList.bind(this);
@@ -37,27 +40,32 @@ class MenuClass extends Component{
                             <span className="chose-top">选择班级</span>
                             <span className="chose-name">{this.state.teacherName}</span>
                             <Button type="primary" onClick={this.toChoseClass}>更改班级</Button>
-                            <Button type="primary" onClick={this.handlebtnChange}>{this.state.btucontent}</Button>
+                            <Button type="primary" onClick={this.handlebtnChange} loading={this.state.loading}>{this.state.btucontent}</Button>
                         </div>
-                        <Menu theme="light"  mode="horizontal"  defaultSelectedKeys="1">
+                        <Menu theme="light"  mode="horizontal"  defaultSelectedKeys={this.state.key}>
                             <Menu.Item key = "1" onClick={(item) => {this.changeBtnContent(item)}}>
-                                <Link to="/Manager/ChoseClass/addClass">选择班级</Link>
+                                <Link to="/Manager/ChoseClass/MenuClass/addClass">选择班级</Link>
                             </Menu.Item>
                             <Menu.Item key = "2" onClick={(item) => {this.changeBtnContent(item)}}>
-                                <Link to="/Manager/ChoseClass/deleteClass">删除班级</Link>
+                                <Link to="/Manager/ChoseClass/MenuClass/deleteClass">删除班级</Link>
                             </Menu.Item>
                         </Menu>
                     </div>
                     <div>
                         <Switch>
-                            <Route path="/Manager/ChoseClass/addClass">
-                                <AddClass  getTeachClassList = {this.getTeachClassList} teacherId={this.state.teacherId}/>
-                                </Route>
-                            <Route path="/Manager/ChoseClass/deleteClass">
-                                <DeleteClass getTeachClassList = {this.getTeachClassList} teacherId={this.state.teacherId} />
+                            <Route path="/Manager/ChoseClass/MenuClass/addClass">
+                                {this.state.thisVisible?
+                                    <AddClass getTeachClassList = {this.getTeachClassList}/>:
+                                    <Spin size="large" style={{marginTop:"100px",marginLeft:"400px"}}></Spin>
+                                }
                             </Route>
-                           
-                            {/* <Redirect from="/Manager/ChoseClass" to="/Manager/ChoseClass/addClass"></Redirect> */}
+                            <Route path="/Manager/ChoseClass/MenuClass/deleteClass">
+                                 {this.state.thisVisible?
+                                    <DeleteClass getTeachClassList = {this.getTeachClassList}/>:
+                                    <Spin size="large" style={{marginTop:"100px",marginLeft:"400px"}}></Spin>
+                                 }
+                            </Route>
+                            <Redirect from="/Manager/ChoseClass/MenuClass" to="/Manager/ChoseClass/MenuClass/addClass"></Redirect>
                         </Switch>
                     </div>                    
                     </Router>
@@ -65,14 +73,26 @@ class MenuClass extends Component{
         )
     }
     componentDidMount(){
-        let teacherid = this.props.location.state.teacherId;
-        let teachername = this.props.location.state.teacherName;
+        let teacherid = localStorage.getItem("teachclass");
+        let teachername = localStorage.getItem("teachName");
         this.setState({
             teacherId:teacherid,
-            teacherName:teachername
+            teacherName:teachername,
+            key:localStorage.getItem("count")
         },() => {
             console.log(this.state.teacherId);
+            console.log(this.state.key);
+        if(this.state.key == 2){
+            this.setState({
+                btucontent:"删除班级"
+            })
+        }else{
+            this.setState({
+                btucontent:"添加班级"
+            })
+        }
         })
+        
     }
     //改变按钮
     changeBtnContent = (item) => {
@@ -80,12 +100,13 @@ class MenuClass extends Component{
             this.setState({
                 btucontent:"添加班级"
             })
+            localStorage.setItem("count",item.key)
         }
         else if(item.key==2){
             this.setState({
                 btucontent:"删除班级"
             })
-            
+            localStorage.setItem("count",item.key)
         }
     }
 
@@ -100,21 +121,40 @@ class MenuClass extends Component{
     }
 
     addClass = (list) => {
+        this.setState({
+            thisVisible:false,
+            loading:true
+        })
         ManagerApi.addClass(list).then(
             (res) => {
                 console.log(res);
-                message.success("添加成功",1);
-                this.child.afterClickChange(this.state.List);
+                if(res.data.flag){
+                    message.success("添加成功",1);
+                    this.setState({
+                        thisVisible:true,
+                        loading:false
+                    })
+                }
             },
             (err) => {
-                console.log(err);
+                message.error("添加失败",1)
             })
     }
     deleteClass = (list) => {
+        this.setState({
+            thisVisible:false,
+            loading:true
+        })
         ManagerApi.deleteClass(list).then(
             (res) => {
+                if(res.data.flag){
+                    message.success("删除成功",1);
+                    this.setState({
+                        thisVisible:true,
+                        loading:false
+                    })
+                }
                 console.log(res);
-                message.success("删除成功",1);
             },
             (err) => {
                 console.log(err);
@@ -123,12 +163,13 @@ class MenuClass extends Component{
     handlebtnChange = () => {
         if(this.state.btucontent == "添加班级"){
             console.log("add");
-            this.addClass(this.state.List)
+            this.addClass(this.state.List);
         }
         else if(this.state.btucontent == "删除班级")
         {
             console.log("delete");
             this.deleteClass(this.state.List)
+
         }
     }
 

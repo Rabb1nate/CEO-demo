@@ -63,9 +63,7 @@ class ChosenClasses extends Component {
         changePage(1,page)
     }
     render() { 
-      const pagination = {
-        hideOnSinglePage:true,
-    }
+
       const columns = [
         {
             title: '票数',
@@ -105,7 +103,7 @@ class ChosenClasses extends Component {
       if(localStorage.getItem("userId"))
         return (
           <div className="table_div">
-            <Table columns={columns} dataSource={this.state.data} pagination={pagination}/>
+            <Table columns={columns} dataSource={this.state.data}/>
             </div>
              )
       else return(

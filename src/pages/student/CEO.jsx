@@ -120,7 +120,6 @@ class CEO extends Component {
         total:this.state.totalNum,
         onChange:this.onPageChange,
         current:this.state.currentPage,
-        hideOnSinglePage:true,
     }
     if (localStorage.getItem("userId")){
         return ( 

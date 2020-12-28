@@ -20,10 +20,10 @@ async function agreeApplication(ceoId, studentId, companyName) {
   }
 }
 
-async function getMember(ceoId) {
+async function getMember(studentId) {
   try {
     let res = await Service.post('/student/showCompanyMember', {
-      ceoId
+      studentId
     })
     return res.data
   } catch (e) {
@@ -31,6 +31,7 @@ async function getMember(ceoId) {
     throw e
   }
 }
+
 async function setPosition(ceoId, studentId, position) {
   try {
     let res
@@ -45,6 +46,7 @@ async function setPosition(ceoId, studentId, position) {
     throw e
   }
 }
+
 async function showApplication(currentPage, studentId) {
   try {
     let res = await Service.post('/application/showApplication', {
@@ -55,6 +57,18 @@ async function showApplication(currentPage, studentId) {
   } catch (e) {
     message.warn('网络错误')
     throw e
+  }
+}
+
+async function changeCompanyName(ceo, companyName) {
+  try {
+    return Service.post('/student/changeCompanyName', {
+      ceo,
+      companyName
+    })
+  } catch (e) {
+    message.info('网络错误', e.message || e.msg)
+    return null
   }
 }
 
@@ -82,16 +96,11 @@ async function showAllCompany(id, currentPage = 1) {
 }
 
 async function voteForCompany(id, ceoId) {
-  try {
-    const res = await Service.post('/student/voteForCompany', {
-      studentId: id,
-      ceoId
-    })
-    return res.data
-  } catch (e) {
-    message.warn('网络错误')
-    throw e
-  }
+  const res = await Service.post('/student/voteForCompany', {
+    studentId: id,
+    ceoId
+  })
+  return res.data
 }
 
 async function createCompany(studentId, companyName, type) {
@@ -123,7 +132,8 @@ export {
   showAllCompany,
   voteForCompany,
   createCompany,
-  fetchFileList
+  fetchFileList,
+  changeCompanyName
 }
 
 

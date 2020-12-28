@@ -1,0 +1,12 @@
+.status {
+  border-radius: 2px;
+  padding: .5em;
+  &.pass {
+    background: #dcffae;
+    color: green;
+  }
+  &.reject {
+    background: #ffacb0;
+    color: #a10000;
+  }
+}

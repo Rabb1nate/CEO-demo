@@ -24,8 +24,8 @@ class ChoseClass extends Component {
         return (
             <Fragment>
                         <Switch>
-                            <Route path="/Manager/ChoseClass/addClass" component={AddClass}/>
-                            <Route path="/Manager/ChoseClass/deleteClass" component={DeleteClass}/>
+                            <Route path="/Manager/ChoseClass/MenuClass/addClass" component={MenuClass}/>
+                            <Route path="/Manager/ChoseClass/MenuClass/deleteClass" component={MenuClass}/>
                             <Route path="/Manager/ChoseClass/MenuClass" component={MenuClass}/>
                             <Route path="/Manager/ChoseClass/ChoseTeacher" component={ChoseTeacher}/>
                             <Redirect from="/Manager/ChoseClass" to="/Manager/ChoseClass/ChoseTeacher" />

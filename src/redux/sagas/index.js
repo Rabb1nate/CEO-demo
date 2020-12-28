@@ -14,7 +14,6 @@ export default function* defSaga() {
   yield throttle(2000, 'login', function* () {
     const action = yield select();
     const res = yield call(LoginApi.Login, action.payload)
-    console.log(res)
     if (res.status === 200 && res.data.flag)
     {        
       if(action.payload.studentId!==undefined){
@@ -47,7 +46,8 @@ export default function* defSaga() {
     }
   })
   yield takeEvery('Login_Check', function* () {
-    if (localStorage.getItem("userId"))
+    const res = yield call(LoginApi.KeepLogin, localStorage.getItem("userId"))
+    if (res.status == 200 && res.data.flag)
      {
       yield put(actions.Login_Check_OK())
     }
@@ -176,16 +176,6 @@ export default function* defSaga() {
     }
     else{
       yield put(actions.DeleteFile_NO(res.data.message))
-    }
-  })
-  yield takeEvery('ShowCompanyMember', function* () {
-    const action = yield select()
-    const res = yield call(StudentApi.ShowCompanyMember,action.payload)
-    if (res.status === 200 && res.data.flag) {
-      yield put(actions.ShowCompanyMember_OK(res.data))
-    }
-    else{
-      yield put(actions.ShowCompanyMember_NO())
     }
   })
   /* CEO */

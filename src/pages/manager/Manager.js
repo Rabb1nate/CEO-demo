@@ -77,11 +77,12 @@ class Manager extends Component {
             userid: userId,
             username:userName
         },()=>{
-            this.isLogin()
+            // this.isLogin()
         })
-        if(localStorage.hasOwnProperty("userId") && localStorage.getItem("type")=="admin"){
-           message.success("登录成功",1);
-        }else{
+        if(localStorage.hasOwnProperty("userId") && localStorage.getItem("type")==="teacher") {
+            this.props.history.push('/teacher');
+        }
+        else if(!localStorage.hasOwnProperty("userId")){
             message.info("请先登录",1);
             this.props.history.push('/Student/AllCompanies/ChosenClasses');
         }
@@ -91,7 +92,8 @@ class Manager extends Component {
             (res) => {
                 console.log(res);
                 if(res.data.flag){
-                    message.success("退出成功",1)
+                    message.success("退出成功",1);
+                    localStorage.clear();
                     this.props.history.push('/Student/AllCompanies/ChosenClasses');
                 }else{
                     message.info("退出失败，请重新登录",1)
@@ -102,23 +104,22 @@ class Manager extends Component {
             }
         )
     }
-    isLogin = () => {
-        setInterval(() => {
-            LoginApi.KeepLogin(this.state.userid).then(
-            (res) => {
-                console.log(1);
-                console.log(res);
-                if(!res.data.flag){
-                    this.props.history.push('/Student/AllCompanies/ChosenClasses');
-                }
-            },
-            (err) => {
-                console.log(err);
-            }
-        )
-        },30000);
-        
-    }
+    // isLogin = () => {
+    //     setInterval(() => {
+    //         LoginApi.KeepLogin(this.state.userid).then(
+    //         (res) => {
+    //             console.log(1);
+    //             console.log(res);
+    //             if(!res.data.flag){
+    //                 this.props.history.push('/Student/AllCompanies/ChosenClasses');
+    //             }
+    //         },
+    //         (err) => {
+    //             console.log(err);
+    //         }
+    //     )
+    //     },30000); 
+    // }
 }
 
 export default Manager

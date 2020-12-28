@@ -36,7 +36,6 @@ class AddClass extends Component{
         this.selectRow = this.selectRow.bind(this);
         this.onSelectedRowKeysChange = this.onSelectedRowKeysChange.bind(this);
         this.toBeList = this.toBeList.bind(this);
-        this.afterClickChange = this.afterClickChange.bind(this);
     }
     render(){
         const { selectedRowKeys } = this.state;
@@ -60,7 +59,7 @@ class AddClass extends Component{
     }
     componentDidMount(){
         console.log(this.props);
-        this.changePage(this.props.teacherId,1);
+        this.changePage(localStorage.getItem("teachclass"),1);
     }
     changePage = (teacherId,currentPage) => {
         this.setState({
@@ -110,7 +109,7 @@ class AddClass extends Component{
         let dataList = [];
         let temp = {};
         for(let i=0;i<this.state.selectedRowKeys.length;i++){
-            temp.teacherId = this.props.teacherId;
+            temp.teacherId = localStorage.getItem("teachclass");
             console.log(this.state.selectedRowKeys[i]);
             temp.teachclass = this.state.selectedRowKeys[i];
             dataList.push(temp);
@@ -118,22 +117,6 @@ class AddClass extends Component{
         }
         console.log(dataList);
         this.props.getTeachClassList(dataList,this);
-        // this.afterClickChange(dataList);
-    }
-
-    //添加删除后 删除table中的当前行
-    afterClickChange = (dataList) => {
-        let datasource =this.state.dataSource
-        console.log(datasource);
-        for(let i=0;i<datasource.length;i++){
-            if(datasource[i].teachclass === dataList[i].teachclass){
-                datasource.splice(i,1);
-            }   
-        }
-        console.log(datasource);
-        this.setState({
-            dataSource:datasource
-        })
     } 
 }
 

@@ -75,13 +75,12 @@ class ChoseTeacher extends Component{
 
     handleClick = (text,record) => {
         console.log(record.userId);
+        localStorage.setItem('teachclass',record.userId);
+        localStorage.setItem('teachName',record.userName);
         this.setState({
-            teacherId:record.userId,
-            teacherName:record.userName
         },()=>{
             this.props.history.push({
             pathname: '/Manager/ChoseClass/MenuClass',
-            state: { teacherId:this.state.teacherId,teacherName:this.state.teacherName},
             });
         })
         
