@@ -35,6 +35,7 @@ class Teacher extends Component {
         this.handleDisTeach = this.handleDisTeach.bind(this);
         this.handleExit = this.handleExit.bind(this);
         this.isLogin = this.isLogin.bind(this);
+        this.changeClass = this.changeClass.bind(this);
     }
     render() {
         return (
@@ -74,7 +75,12 @@ class Teacher extends Component {
                                     <Link to="/Teacher/Download">查看上传文件</Link> 
                                 </Menu.Item>
                             </Menu>
-                            
+                            <Button 
+                                    type="primary" 
+                                    ghost size="middle" 
+                                    style={{width:"180px",marginTop:"20px"}}
+                                    onClick={this.changeClass}
+                                >更改班级</Button>
                         </div>
 
                                 <div className="content">
@@ -174,6 +180,9 @@ class Teacher extends Component {
         )
         },300000);
         
+    }
+    changeClass = () => {
+        document.querySelector('.teachbackground').style.display = 'block';
     }
 }
 

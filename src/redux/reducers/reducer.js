@@ -6,7 +6,7 @@ const newstate = {
   }
 }
 export default (state = newstate, action) => {
-  var data = {CompanyData:state.CompanyData,CeoData:state.CeoData,ApplicationData:state.ApplicationData,FileData:state.FileData}
+  var data = {CompanyData:state.CompanyData,CeoData:state.CeoData,ApplicationData:state.ApplicationData,FileData:state.FileData,MemberData:state.MemberData}
   switch (action.type) {
     case "getAllCompanies":
       return { isLogin:state.isLogin, ...data,  ...action}
@@ -83,6 +83,12 @@ export default (state = newstate, action) => {
       return {isDeleteFile:true, isLogin:state.isLogin,...data, ...action.payload}
     case "DeleteFile_NO":
       return {isDeleteFile:false, isLogin:state.isLogin,...data, ...action.payload}
+    case "ShowCompanyMember":
+      return {isLogin:state.isLogin,...data, ...action}
+    case "ShowCompanyMember_OK":
+      return {isShowCompanyMember:true, isLogin:state.isLogin,...data, MemberData:action.payload.data}
+    case "ShowCompanyMember_NO":
+      return {isShowCompanyMember:false, ...data,isLogin:state.isLogin, ...action.payload}
     case "Exist" :
       return {...data,...action,isLogin:state.isLogin}
     case "CEO_SET_MEMBER":

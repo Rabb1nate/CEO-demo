@@ -5,34 +5,23 @@ class SetOthers extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            title: [{ "title": "迟到一次扣分:", "name": "late", "value": "" }, { "title": "旷到一次扣分:", "name": "absence", "value": "" }, { "title": "公司最多允许人数:", "name": "sameClassMember", "value": "" }, { "title": "一个企业允许同一个班级的同学个数", "name": "companyNum", "value": "" }],
             teachclass: localStorage.getItem("teachclass"),
-            late: "",
-            absence: "",
-            sameClassMember: "",
-            companyNum: "",
             loading: true
         }
     }
     render() {
+        let list = this.state.title.map((item, index) => {
+            return (
+                <div className="item3">
+                    <span className="name">{item.title}</span>
+                    <InputNumber min={0} max={100} step={1} value={item.value} onChange={(value) => this.change(value, index)} />
+                </div>)
+        })
         return (
             <Spin spinning={this.state.loading}>
                 <div className="setChild">
-                    <div className="item3">
-                        <span className="name">迟到一次扣分:</span>
-                        <InputNumber min={0} max={100} step={1} value={this.state.late} onChange={(value) => this.change(value, "late")} />
-                    </div>
-                    <div className="item3">
-                        <span className="name">旷到一次扣分:</span>
-                        <InputNumber min={0} max={100} step={1} value={this.state.absence} onChange={(value) => this.change(value, "absence")} />
-                    </div>
-                    <div className="item3">
-                        <span className="name">公司最多允许人数:</span>
-                        <InputNumber min={0} step={1} value={this.state.sameClassMember} onChange={(value) => this.change(value, "sameClassMember")} />
-                    </div>
-                    <div className="item3">
-                        <span className="name">一个企业允许同一个班级的同学个数:</span>
-                        <InputNumber min={0} step={1} value={this.state.companyNum} onChange={(value) => this.change(value, "companyNum")} />
-                    </div>
+                    {list}
                     <Button className="submit" onClick={() => this.submit()}>修改</Button>
                 </div>
             </Spin>
@@ -43,12 +32,14 @@ class SetOthers extends React.Component {
             console.log(rs);
             if (rs.data.flag === true) {
                 let res = rs.data.data
+                let title = [...this.state.title];
+                title[0].value = res.late;
+                title[1].value = res.absence;
+                title[2].value = res.sameClassMember;
+                title[3].value = res.companyNum
                 this.setState({
-                    late: res.late,
-                    absence: res.absence,
-                    sameClassMember: res.sameClassMember,
-                    companyNum: res.companyNum,
-                    loading:false
+                    title,
+                    loading: false
                 })
             } else {
                 notification.open({
@@ -61,16 +52,19 @@ class SetOthers extends React.Component {
 
         })
     }
-    change = (value, key) => {
-        let data = {}
-        data[key] = value
-        console.log(key + ":" + value);
-        console.log(data);
-        this.setState(data)
+    change = (value, index) => {
+        let title = [...this.state.title]
+        console.log(title);
+        console.log(index);
+        console.log(value);
+        title[index].value = value
+        this.setState({
+            title
+        })
     }
     submit = () => {
         console.log(this.state.memberScore);
-        updateConfigOther(this.state.late, this.state.absence, this.state.sameClassMember, this.state.companyNum, this.state.teachclass).then(rs => {
+        updateConfigOther(this.state.title[0].value, this.state.title[1].value, this.state.title[2].value, this.state.title[3].value,this.state.teachclass).then(rs => {
             if (rs.data.flag === true) {
                 notification.open({
                     message: '提示',

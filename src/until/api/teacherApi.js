@@ -122,9 +122,9 @@ function rejectChange(ceo,companyName) {
   })
 }
 /*删除公司*/
-function deleteCompany(ceo) {
+function deleteCompany(ceo,companyName) {
   return Service.post('/teacher/deletecompany', {
-    ceo
+    ceo,companyName
   })
 }
 
@@ -188,6 +188,7 @@ function showConfig(teachclass){
     teachclass
   })
 }
+//
 function ShowComInfo(teachclass) {
   return Service.post('/student/showCompany', {
     teachclass})

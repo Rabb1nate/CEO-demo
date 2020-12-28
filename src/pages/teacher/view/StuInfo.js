@@ -73,7 +73,7 @@ class StuInfo extends Component {
       let rs = JSON.parse(res.data);
       let companyName
       for(let i = 0;i<rs.length;i++){
-        if(rs[i].companyName === undefined)
+        if(rs[i].companyName === undefined || rs[i].companyName == "null")
           companyName = "无"
         else companyName = rs[i].companyName
         lists.push({
@@ -105,7 +105,8 @@ class StuInfo extends Component {
       <div id="StuInfo">
         <div className='header'>
           <div className='left'>
-            <Select defaultValue="name"
+            <p className='title'>学生信息</p>
+            {/* <Select defaultValue="name"
               style={{ width: 100 }}
               onSelect={(value) => { this.changeSelect(value) }} >
               <Option value="name">学生姓名</Option>
@@ -119,7 +120,7 @@ class StuInfo extends Component {
               // onSearch={}
               onChange={(e) => { this.inputChange(e) }}
               value={this.state.value}
-            ></Search>
+            ></Search> */}
           </div>
           <div className="right">
             <Button type="primary" shape="round" icon={<DownloadOutlined />} size='middle' onClick={() => {this.downLoad()}}>导出Excel表</Button>

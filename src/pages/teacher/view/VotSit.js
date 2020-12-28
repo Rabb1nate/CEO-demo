@@ -83,7 +83,7 @@ class VotSit extends Component {
                   <Button 
                     type="primary" 
                     size="middle"
-                    style={{marginLeft:"20px"}}
+                    style={{marginLeft:"75%"}}
                     onClick={this.handleChange}
                   >{this.state.btuValue}</Button>
                 </span>
@@ -132,6 +132,15 @@ class VotSit extends Component {
             pagination
             })
             this.addAction(this.state.dataSource);
+          }else{
+            this.setState({
+              loading:false
+            })
+            notification.success({
+              description : '当前页面暂无数据',
+              message : '提醒',
+              placement:'bottomRight'
+            })
           }
         },
         (err) => {

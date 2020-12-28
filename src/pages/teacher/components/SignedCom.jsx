@@ -1,6 +1,7 @@
 import React from 'react'
 import { Table, Button, notification,Space} from "antd"
 import { showAll, setNosign} from '../../../until/api/teacherApi'
+import '../../../static/style/teacherStyle.scss'
 class SignedCom extends React.Component {
   constructor(props) {
     super(props)
@@ -100,8 +101,8 @@ class SignedCom extends React.Component {
   }
   render() {
     return (
-      <div>
-        <Table
+      <div className='sign'>
+        <Table 
           pagination={this.state.pagination}
           columns={this.state.columns}
           loading={this.state.loading}

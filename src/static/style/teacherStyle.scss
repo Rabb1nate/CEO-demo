@@ -1,49 +1,74 @@
-#StuInfo{
+p{
+    margin: 0px;
+}
+#StuInfo {
     width: 100%;
-    .header{
+    .header {
+        margin-bottom: 10px;
         width: 100%;
         display: flex;
         justify-content: space-between;
-        .left{
+
+        .left {
             display: flex;
+
+            .title {
+                font-size: 20px;
+                font-weight: bold;
+            }
         }
-        .right{
+
+        .right {
             width: auto;
             margin-right: 10px;
         }
     }
 }
-.set{
-    .setChild{
+
+.set {
+    .setChild {
         margin-top: 10px;
     }
-    .item3{
-        padding:10px 10px;
-        .name{
+
+    .item3 {
+        padding: 10px 10px;
+
+        .name {
             display: inline-block;
             width: 250px;
             padding: 10px;
         }
     }
-    .item{
-        padding:10px 10px;
-        .name{
+
+    .item {
+        padding: 10px 10px;
+
+        .name {
             display: inline-block;
             width: 180px;
             padding: 10px;
         }
     }
-    .submit{
+
+    .submit {
         margin: 0px 20px;
     }
 }
-.setCompany{
+
+.setCompany {
     display: flex;
-   
+
 }
-.notice{
+
+.notice {
     position: absolute;
     right: 10px;
     bottom: 0px;
     color: rgb(255, 127, 127);
+}
+#news{
+    .title {
+        font-size: 20px;
+        font-weight: bold;
+    }
 }

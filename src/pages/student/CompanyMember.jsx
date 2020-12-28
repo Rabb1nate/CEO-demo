@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { Table,  Empty} from 'antd';
+import { Table,  Space,   message, Button, Empty } from 'antd';
 import actions from '../../redux/actionCreators/creators'
 import changePage from '../../until/changePage'
-import changeNav from '../../until/changeNav'
 import '../../static/style/style.scss'
 
-class Join extends Component {
+class CompanyMember extends Component {
     constructor(props) {
         super(props);
         this.state = { 
             totalNum:0,
-            currentPage:parseInt(sessionStorage.getItem("Page3"))||1,
+            currentPage:parseInt(sessionStorage.getItem("Page5"))||1,
             data : [
               ],
          }
@@ -21,15 +20,25 @@ class Join extends Component {
     UNSAFE_componentWillUpdate(newProps,newState){
       if(newProps!==this.props){
         try{
-          const {ApplicationData} = newProps
-          let newdata = ApplicationData.object
+          if( newProps.isVoteForCeo === true )
+          message.success("投票成功")
+          if( newProps.message ){
+            if( newProps.isRunCeo === true ){
+              message.success(newProps.message)
+            }
+            else if(newProps.isVoteForCeo === false || newProps.isRunCeo === false ){
+              message.error(newProps.message)
+            }
+          }
+          const {MemberData} = newProps
+          let newdata = MemberData.object
           for (let item in newdata){
             newdata[item].key = item
           }
           this.setState({
-            currentPage: parseInt(sessionStorage.getItem("Page3"))||1,
+            currentPage: parseInt(sessionStorage.getItem("Page5"))||1,
             data:newdata,
-            totalNum:ApplicationData.totalNumber
+            totalNum:MemberData.totalNumber
           })
         
         }
@@ -37,10 +46,10 @@ class Join extends Component {
       }
     }
     componentDidMount() {
-      if(localStorage.getItem("userId") && !this.props.ApplicationData){
-        this.props.ShowApplication(parseInt(sessionStorage.getItem("Page3"))||1,localStorage.getItem("userId"))
+      if(localStorage.getItem("userId") && !this.props.MemberData){
+        this.props.ShowCompanyMember(localStorage.getItem("userId"))
       }
-      if(this.props.ApplicationData){
+      if(this.props.MemberData){
         this.props.Exist()
       }
     }
@@ -54,44 +63,52 @@ class Join extends Component {
     }
     
     onPageChange (page,pageSize) {
-        this.props.ShowApplication(page,localStorage.getItem("userId"))
+      if (localStorage.getItem("userId")){
+        this.props.ShowCompanyMember(localStorage.getItem("userId"))
+      }
         // let newdata = this.state.data.object
         this.setState({
             currentPage: page,
             // data:newdata
         })
-        changePage(3,page)
+        changePage(5,page)
     }
     render() { 
-      changeNav(1, 1)
+
       const columns = [
         {
-            title: '志愿等级',
-            dataIndex: 'level',
-            key: 'level',
+            title: '职位',
+            dataIndex: 'position',
+            key: 'position',
         },
+          {
+            title: '姓名',
+            dataIndex: 'userName',
+            key: 'userName',
+          },
         {
             title: '学号',
             dataIndex: 'studentId',
             key: 'studentId',
         },
         {
-            title: '专业',
-            dataIndex: 'academy',
-            key: 'academy',
-        },
-        {
             title: '公司名',
-            dataIndex: 'companyName',
             key: 'companyName',
+            dataIndex: 'companyName',
         },
         {
-            title: '状态',
-            key: 'state',
-            dataIndex: 'state',
-            render: (text) => {
-                return(<p>{text}</p>)
-            },
+            title: '专业',
+            key: 'academy',
+            dataIndex: 'academy',
+        },
+        {
+          title: '操作',
+          key: 'action',
+          render: (text, record) => (
+            <Space size="middle">
+              <a onClick={this.props.VoteForCeo.bind(this,record.studentId,localStorage.getItem("userId"))}>为{record.userName}投票</a>
+            </Space>
+          ),
         },
       ]
       const pagination = {
@@ -101,24 +118,33 @@ class Join extends Component {
         current:this.state.currentPage,
         hideOnSinglePage:true,
     }
-    if(localStorage.getItem("userId"))
+    if (localStorage.getItem("userId")){
         return ( 
             <div className="table_div">
             <Table columns={columns} dataSource={this.state.data} pagination={pagination}/>
             </div>
              )
-    else return(
+        }
+        else{
+          return ( 
             <div className="table_div">
               <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}>请登录后查看</Empty>
             </div>
-            )
+             )
+        }
     } 
 }
  
 const mapDispatchToProps = (dispatch) => {
   return {
-    ShowApplication: (page,studentId) => {
-        dispatch(actions.ShowApplication(page,studentId))
+    ShowCompanyMember: (studentId) => {
+        dispatch(actions.ShowCompanyMember(studentId))
+    },
+    VoteForCeo: (ceoId,studentId) => {
+        dispatch(actions.VoteForCeo(ceoId,studentId))
+    },
+    RunCeo: () => {
+      dispatch(actions.RunCeo())
     },
     Exist: () => {
       dispatch(actions.Exist())
@@ -129,4 +155,4 @@ const mapStateToProps = state => {
   return state
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Join)
+export default connect(mapStateToProps, mapDispatchToProps)(CompanyMember)

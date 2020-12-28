@@ -1,6 +1,7 @@
 import React from 'react'
 import { changeCompanyName, agreeChange, rejectChange } from '../../../until/api/teacherApi'
 import { Table, Space, Button, notification, Input, Select } from 'antd'
+import '../../../static/style/teacherStyle.scss'
 const { Search } = Input
 const { Option } = Select;
 class newLists extends React.Component {
@@ -59,7 +60,8 @@ class newLists extends React.Component {
     return (
       <div id="news">
         <div>
-          <Select defaultValue="name" style={{ width: 100 }} >
+          <p  className='title'>消息</p>
+          {/* <Select defaultValue="name" style={{ width: 100 }} >
             <Option value="name">学生姓名</Option>
             <Option value="id">学生学号</Option>
           </Select>
@@ -69,7 +71,7 @@ class newLists extends React.Component {
             style={{ width: 200, marginBottom: 10 }}
             onChange={(e) => { this.inputChange(e) }}
             value={this.state.value}
-          ></Search>
+          ></Search> */}
         </div>
         <div className="header">
           <Table

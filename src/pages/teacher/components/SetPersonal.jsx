@@ -7,29 +7,22 @@ class SetPersonal extends React.Component {
         super(props)
         console.log(props);
         this.state = {
-            loading:true,
-            ceoScore: "",
-            memberScore: "",
-            signScore: "",
+            title: [{ "title": "CEO打分", "name": "ceoScore", "value": "" }, { "title": "成员互评", "name": "memberScore", "value": "" }, { "title": "签到打分", "name": "signScore", "value": "" }],
+            loading: true,
             teachclass: localStorage.getItem("teachclass")
         }
     }
     render() {
+        let list = this.state.title.map((item, index) => {
+            return (<div className="item">
+                <span className="name">{item.title}打分占比:</span>
+                <InputNumber min={0} max={1} step={0.1} value={item.value} onChange={(number) => this.change(number, index)} />
+            </div>)
+        })
         return (
             <Spin spinning={this.state.loading}>
                 <div className="setChild">
-                    <div className="item">
-                        <span className="name">CEO打分占比:</span>
-                        <InputNumber min={0} max={10} step={0.1} value={this.state.ceoScore} onChange={(number) => this.change(number, "ceoScore")} />
-                    </div>
-                    <div className="item">
-                        <span className="name">成员互评打分占比:</span>
-                        <InputNumber min={0} max={10} step={0.1} value={this.state.memberScore} onChange={(number) => this.change(number, "memberScore")} />
-                    </div>
-                    <div className="item">
-                        <span className="name">签到打分占比:</span>
-                        <InputNumber min={0} max={10} step={0.1} value={this.state.signScore} onChange={(number) => this.change(number, "signScore")} />
-                    </div>
+                    {list}
                     <Button className="submit" onClick={() => this.submit()}>修改</Button>
                     <div className="notice">注意:每一列占比和要为1!</div>
                 </div>
@@ -41,11 +34,13 @@ class SetPersonal extends React.Component {
             console.log(rs);
             if (rs.data.flag === true) {
                 let res = rs.data.data
+                let title = [...this.state.title];
+                title[0].value = res.ceoScore;
+                title[1].value = res.memberScore;
+                title[2].value = res.signScore;
                 this.setState({
-                    ceoScore: res.ceoScore,
-                    memberScore: res.memberScore,
-                    signScore: res.signScore,
-                    loading:false
+                    title,
+                    loading: false
                 })
             } else {
                 notification.open({
@@ -58,16 +53,19 @@ class SetPersonal extends React.Component {
 
         })
     }
-    change = (value, key) => {
-        let data = {}
-        data[key] = value
-        console.log(key + ":" + value);
-        console.log(data);
-        this.setState(data)
+    change = (value, index) => {
+        let title = [...this.state.title]
+        console.log(title);
+        console.log(index);
+        console.log(value);
+        title[index].value = value
+        this.setState({
+            title
+        })
     }
     submit = () => {
         console.log(this.state.memberScore);
-        updateConfigMember(this.state.ceoScore, this.state.memberScore, this.state.signScore, this.state.teachclass).then(rs => {
+        updateConfigMember(this.state.title[0].value, this.state.title[1].value, this.state.title[2].value,this.state.teachclass).then(rs => {
             if (rs.data.flag === true) {
                 notification.open({
                     message: '提示',

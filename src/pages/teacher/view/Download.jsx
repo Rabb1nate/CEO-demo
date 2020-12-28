@@ -87,7 +87,7 @@ class Download extends Component {
           },
           (err) => { 
             console.log(err);
-            message.error('删除失败！');
+            message.warning("请求超时或服务器异常，请检查网络或联系管理员!");
           }
         )
     
@@ -130,14 +130,15 @@ class Download extends Component {
         res.then(
             (result) => { 
                 let data = JSON.parse(result.data);
-                console.log(data);
+                // console.log(data);
                 let newData = [];
                 for (let i in data) { 
                     newData.push({
                         key: i,
                         "stuid": data[i].studentId,
                         "filename": data[i].fileName,
-                        "id":data[i].id
+                        "id": data[i].id,
+                        "teachclass":data[i].teachclass
                     })
                 };
                 this.setState({

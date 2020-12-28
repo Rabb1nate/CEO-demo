@@ -2,63 +2,53 @@ import React from 'react'
 import { InputNumber, Button, notification, Spin } from 'antd'
 import '../../../static/style/teacherStyle.scss'
 import { showConfig, updateConfigCompany } from '../../../until/api/teacherApi'
+
 class SetCompany extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            title: [{ "title": "老师给普通企业", "name": "companyScore", "value": "" }, { "title": "新闻机构", "name": "newsScore", "value": "" }, { "title": "银行", "name": "bankScore", "value": "" }, { "title": "会计事务所:", "name": "accountScore", "value": "" }, { "title": "工商局", "name": "tradeScore", "value": "" }, { "title": "税务局:", "name": "revenueScore", "value": "" }, { "title": "老师给机构", "name": "agencyScore", "value": "" }, { "title": "企业互评给机构", "name": "fromCompanyScore", "value": "" }],
             teachclass: localStorage.getItem("teachclass"),
-            loading:true,
-            companyScore: "",
-            newsScore: "",
-            bankScore: "",
-            accountScore: "",
-            tradeScore: "",
-            revenueScore: "",
-            agencyScore: "",
-            fromCompanyScore: ""
+            loading: true,
+            data: [],
         }
     }
     render() {
+        let list1 = this.state.title.map((item, index) => {
+            if(index < 6) {
+                return (
+                    <div className="item" key={index}>
+                        <span className="name">{item.title}打分占比:</span>
+                        <InputNumber min={0} max={1} step={0.1} value={item.value} onChange={(number) => this.change(number, index)} />
+                    </div>
+                )
+            }
+            else{
+                return " "
+            }
+        })
+        let list2  = this.state.title.map((item,index) => {
+            if(index>5){
+                return (
+                    <div className="item" key = {index}>
+                        <span className="name">{item.title}打分占比:</span>
+                        <InputNumber min={0} max={1} step={0.1} value={item.value} onChange={(number) => this.change(number, index)} />
+                    </div>
+                )
+            }else{
+                return " "
+            }
+        })
         return (
             <Spin spinning={this.state.loading}>
                 <div className="setChild">
-
                     <div className="setCompany">
                         <div>
-                            <div className="item">
-                                <span className="name">老师给普通企业打分占比:</span>
-                                <InputNumber min={0} max={10} step={0.1} value={this.state.companyScore} onChange={(number) => this.change(number, "companyScore")} />
-                            </div>
-                            <div className="item">
-                                <span className="name">新闻机构打分占比:</span>
-                                <InputNumber min={0} max={10} step={0.1} value={this.state.newsScore} onChange={(number) => this.change(number, "newsScore")} />
-                            </div>
-                            <div className="item">
-                                <span className="name">银行打分占比:</span>
-                                <InputNumber min={0} max={10} step={0.1} value={this.state.bankScore} onChange={(number) => this.change(number, "bankScore")} />
-                            </div>
-                            <div className="item">
-                                <span className="name">会计事务所打分占比:</span>
-                                <InputNumber min={0} max={10} step={0.1} value={this.state.accountScore} onChange={(number) => this.change(number, "accountScore")} />
-                            </div>
-                            <div className="item">
-                                <span className="name">工商局打分占比:</span>
-                                <InputNumber min={0} max={10} step={0.1} value={this.state.tradeScore} onChange={(number) => this.change(number, "tradeScore")} />
-                            </div>
-                            <div className="item">
-                                <span className="name">税务局打分占比:</span>
-                                <InputNumber min={0} max={10} step={0.1} value={this.state.revenueScore} onChange={(number) => this.change(number, "revenueScore")} />
-                            </div>
+                            {list1}
+                          
                         </div>
                         <div>
-                            <div className="item">
-                                <span className="name">老师给机构打分占比:</span>
-                                <InputNumber min={0} max={10} step={0.1} value={this.state.agencyScore} onChange={(number) => this.change(number, "agencyScore")} />
-                            </div>
-                            <div className="item">
-                                <span className="name">企业互评给机构打分占比:</span>
-                                <InputNumber min={0} max={10} step={0.1} value={this.state.fromCompanyScore} onChange={(number) => this.change(number, "fromCompanyScore")} />
-                            </div>
+                            {list2}
                         </div>
 
                     </div>
@@ -70,22 +60,25 @@ class SetCompany extends React.Component {
     }
     componentDidMount() {
         showConfig(this.state.teachclass).then(rs => {
-
             console.log(rs);
             if (rs.data.flag === true) {
                 let res = rs.data.data
+                let title = [...this.state.title];
+                title[0].value = res.companyScore;
+                title[1].value = res.newsScore;
+                title[2].value = res.bankScore;
+                title[3].value = res.accountScore;
+                title[4].value = res.tradeScore;
+                title[5].value = res.revenueScore;
+                title[6].value = res.agencyScore;
+                title[7].value = res.fromCompanyScore;
+                console.log(title);
+                console.log(rs.data);
                 this.setState({
-                    companyScore: res.companyScore,
-                    newsScore: res.newsScore,
-                    bankScore: res.bankScore,
-                    accountScore: res.accountScore,
-                    tradeScore: res.tradeScore,
-                    revenueScore: res.revenueScore,
-                    agencyScore: res.agencyScore,
-                    fromCompanyScore: res.fromCompanyScore,
-                    loading:false
+                    title: title,
+                    loading: false
                 })
-                
+
             } else {
                 notification.open({
                     message: '警告',
@@ -97,15 +90,18 @@ class SetCompany extends React.Component {
 
         })
     }
-    change = (value, key) => {
-        let data = {}
-        data[key] = value
-        console.log(key + ":" + value);
-        console.log(data);
-        this.setState(data)
+    change = (value, index) => {
+        let title = [...this.state.title]
+        console.log(title);
+        console.log(index);
+        console.log(value);
+        title[index].value = value
+        this.setState({
+            title
+        })
     }
     submit = () => {
-        updateConfigCompany(this.state.companyScore, this.state.newsScore, this.state.bankScore, this.state.accountScore, this.state.tradeScore, this.state.revenueScore, this.state.agencyScore, this.state.fromCompanyScore, this.state.teachclass).then(rs => {
+        updateConfigCompany(this.state.title[0].value,this.state.title[1].value,this.state.title[2].value,this.state.title[3].value,this.state.title[4].value,this.state.title[5].value,this.state.title[6].value,this.state.title[7].value,this.state.teachclass).then(rs => {
             if (rs.data.flag === true) {
                 notification.open({
                     message: '提示',

@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Table, Tag, Space,pagination, message, Button , Empty , Modal , Upload,} from 'antd';
 import actions from '../../redux/actionCreators/creators'
 import changePage from '../../until/changePage'
-import { UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined , ExclamationCircleOutlined } from '@ant-design/icons';
 import baseurl from '../../until/BaseUrl'
 // import $ from 'jquery';
 import '../../static/style/style.scss'
@@ -11,14 +11,15 @@ import '../../static/style/style.scss'
 class Detail extends Component {
     constructor(props) {
         super(props);
-        this.state = { 
+        this.state = {
             totalNum:0,
             currentPage:parseInt(sessionStorage.getItem("Page4"))||1,
             data : [],
             visible:false,
-            fileList:[],       
+            fileList:[],
          }
          this.onPageChange=this.onPageChange.bind(this)
+         this.confirm = this.confirm.bind(this)
     }
 
     UNSAFE_componentWillUpdate(newProps,newState){
@@ -68,7 +69,7 @@ class Detail extends Component {
       });
     };
     handleOk = e => {
-  
+
       this.setState({
         visible: false,
       });
@@ -105,17 +106,19 @@ class Detail extends Component {
             that.setState({
               uploading: false,
             })
+
             that.props.ShowFile(localStorage.getItem("class"),parseInt(sessionStorage.getItem("Page4"))||1)
           }
           else{
             message.error("上传失败，文件可能为空")
+            //后端返回提示信息后再修改
             that.setState({
               uploading: false,
             })
           }
         }
-			}
-     
+      }
+
       // $.ajax({
       //   url: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
       //   method: 'post',
@@ -136,6 +139,18 @@ class Detail extends Component {
       //   },
       // })
     }
+    confirm(id) {
+      Modal.confirm({
+        title: '提示',
+        icon: <ExclamationCircleOutlined />,
+        content: '确定要删除文件？',
+        onOk: () => {
+          this.props.DeleteFile(id)
+        },
+        okText: '确认',
+        cancelText: '取消',
+      })
+    }
     onPageChange (page,pageSize) {
         this.props.ShowFile(localStorage.getItem("class"),page)
         // let newdata = this.state.data.object
@@ -146,7 +161,7 @@ class Detail extends Component {
         changePage(4,page)
     }
 
-    render() { 
+    render() {
       const columns = [
         {
             title: '文件名',
@@ -178,11 +193,12 @@ class Detail extends Component {
               <a onClick={this.props.DownloadFile.bind(this,record.id)}>下载</a>
             </Space>
           )
-            else 
+            else
               return(
                 <Space size="middle">
                 <a onClick={this.props.DownloadFile.bind(this,record.id)}>下载</a>
-                <a onClick={this.props.DeleteFile.bind(this,record.id)}>删除</a>
+                {/* <a onClick={this.props.DeleteFile.bind(this,record.id)}>删除</a> */}
+                <a onClick={this.confirm.bind(this,record.id)}>删除</a>
               </Space>
               )},
         },
@@ -192,6 +208,7 @@ class Detail extends Component {
         total:this.state.totalNum,
         onChange:this.onPageChange,
         current:this.state.currentPage,
+        hideOnSinglePage:true,
     }
     const { uploading, fileList } = this.state;
     const props = {
@@ -215,9 +232,10 @@ class Detail extends Component {
     };
 
     if(localStorage.getItem("class"))
-        return ( 
+        return (
             <div className="table_div">
-              <Button className="RunCeo" type="primary" onClick={this.showModal}>上传</Button>
+              {/* <Button className="RunCeo" type="primary" onClick={this.showModal}>上传</Button> */}
+              {/* 如果需要再开启 */}
               <Modal
                 title="上传文件"
                 visible={this.state.visible}
@@ -250,9 +268,9 @@ class Detail extends Component {
               <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}>请登录后查看</Empty>
             </div>
             )
-    } 
+    }
 }
- 
+
 const mapDispatchToProps = (dispatch) => {
   return {
     ShowFile: (teachClass,currentPage) => {

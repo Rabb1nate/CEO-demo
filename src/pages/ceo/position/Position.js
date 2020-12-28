@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useReducer} from 'react'
+import React, {useState, useEffect, useReducer, memo} from 'react'
 import {Card, PageHeader, Button, Modal, Input, Radio, Divider, message, List, Checkbox} from "antd";
 import {
   setPosition as requestSetPos,
@@ -8,6 +8,7 @@ import {
   createCompany as createCompanyImpl
 } from "../../../until/api/ceo";
 import './position.scss'
+import {Contain, con} from '../store'
 
 const positions = [
   'ceo',
@@ -17,7 +18,6 @@ const positions = [
 
 const companyTypes = [
   '贸易公司',
-  '是贸易企业',
   '制造企业',
   '物流企业',
   '银行',
@@ -26,7 +26,6 @@ const companyTypes = [
   '工商局',
   '税务局'
 ]
-
 
 // const mockData = [
 //   {
@@ -158,7 +157,7 @@ function Position(props) {
   }
   const createCompany = async (userId) => {
     const res = await createCompanyImpl(userId, companyName, companyType)
-    message.info(res.msg)
+    message.info(res.msg ? res.msg : res.message)
   }
 
   /* UI */
@@ -227,78 +226,79 @@ function Position(props) {
   }
 
   return (
-    <div>
-      <PageHeader title="成员" subTitle="member"/>
-      <div className="member">
-        {
-          state.members
-            ? (
-              state.members?.length
-                ? state.members.map(member => <Member key={member.id} member={member}/>)
-                : <NoMember/>
-            )
-            : <LoadingMember/>
-        }
-      </div>
-      <Modal
-        visible={visible}
-        onCancel={() => {
-          setVisible(false)
-        }}
-        footer={false}
-      >
-        <Radio.Group onChange={({target: {value}}) => {
-          setPosValue(value)
-        }}>
-          <PageHeader
-            title="职位"
-            subTitle="position"
-            style={{padding: '16px 0'}}
-          />
+    <Contain>
+      <div>
+        <PageHeader title="成员" subTitle="member"/>
+        <div className="member">
           {
-            positions.map(position => (
-              <Radio.Button
-                buttonStyle="solid"
-                key={position}
-                value={position}
-                onChange={e => {
-                  setPosValue(e.target.value)
-                }}
-              >
-                {position}
-              </Radio.Button>
-            ))
+            state.members
+              ? (
+                state.members?.length
+                  ? state.members.map(member => <Member key={member.id} member={member}/>)
+                  : <NoMember/>
+              )
+              : <LoadingMember/>
           }
-        </Radio.Group>
-        <Divider/>
-        <Button
-          type="primary"
-          shape="round"
-          onClick={setPosition}
-          disabled={!posValue}
-        > 确 认 </Button>
-      </Modal>
+        </div>
+        <Modal
+          visible={visible}
+          onCancel={() => {
+            setVisible(false)
+          }}
+          footer={false}
+        >
+          <Radio.Group onChange={({target: {value}}) => {
+            setPosValue(value)
+          }}>
+            <PageHeader
+              title="职位"
+              subTitle="position"
+              style={{padding: '16px 0'}}
+            />
+            {
+              positions.map(position => (
+                <Radio.Button
+                  buttonStyle="solid"
+                  key={position}
+                  value={position}
+                  onChange={e => {
+                    setPosValue(e.target.value)
+                  }}
+                >
+                  {position}
+                </Radio.Button>
+              ))
+            }
+          </Radio.Group>
+          <Divider/>
+          <Button
+            type="primary"
+            shape="round"
+            onClick={setPosition}
+            disabled={!posValue}
+          > 确 认 </Button>
+        </Modal>
 
-      <PageHeader title="所有公司" subTitle="all company"/>
-      <List
-        style={{padding: '15px'}}
-        dataSource={state.companies || []}
-        grid={{column: 4}}
-        loading={loading}
-        pagination={{
-          pageSize: state.pageSize || 7,
-          total: state.companyTotal || 0
-        }}
-        renderItem={(company, i) => {
-          return <Company key={i} company={company}/>
-        }}
-      >
-      </List>
+        <PageHeader title="所有公司" subTitle="all company"/>
+        <List
+          style={{padding: '15px'}}
+          dataSource={state.companies || []}
+          grid={{column: 4}}
+          loading={loading}
+          pagination={{
+            pageSize: state.pageSize || 7,
+            total: state.companyTotal || 0
+          }}
+          renderItem={(company, i) => {
+            return <Company key={i} company={company}/>
+          }}
+        >
+        </List>
 
-      <PageHeader title="创建公司"/>
-      <Card style={{margin: '15px'}}>
-        <Input placeholder="公司名" onChange={e => setCompanyName(e.target.value)}/>
-        公司类型：<Radio.Group onChange={({target: {value}}) => {
+        <PageHeader title="创建公司"/>
+        <Card style={{margin: '15px'}}>
+          <Input placeholder="公司名" onChange={e => setCompanyName(e.target.value)}/>
+          公司类型：<Radio.Group onChange={({target: {value}}) => {
           setPosValue(value)
         }}>
           {
@@ -316,12 +316,13 @@ function Position(props) {
             ))
           }
         </Radio.Group>
-        <br/>
-        <Button
-          onClick={createCompany}
-          type="primary"> 创 建 </Button>
-      </Card>
-    </div>
+          <br/>
+          <Button
+            onClick={createCompany.bind(null, userId)}
+            type="primary"> 创 建 </Button>
+        </Card>
+      </div>
+    </Contain>
   )
 }
 
