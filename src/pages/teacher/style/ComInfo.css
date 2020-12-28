@@ -1,0 +1,36 @@
+.input{
+    width: 30%;
+   
+}
+.input-search{
+    width: 30%;
+}
+.title{
+    font-size: 20px;
+    font-weight: bold;
+}
+.com-search{
+    padding-left: 45%;
+}
+.InpSco{
+    width: 70%;
+    border: none;
+}
+.InpSco:focus{
+    outline: none;
+    border:1px solid #1890FF;
+}
+.Inp-Sco-div{
+    display: flex;
+}
+.InpBut{
+    border-radius: 2px;
+    background-color: #1890FF;
+    color: white;
+    border: none;
+    font-size: 2vh;
+}
+.InpBut:hover{
+    cursor: pointer;
+    background-color:  #5aacfa;
+}

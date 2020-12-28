@@ -1,0 +1,54 @@
+#All{
+    display: flex;
+    height: 100vh;
+}
+.nav-div{
+    width: 20%;
+}
+.login{
+    margin-top: 10px;
+    margin-bottom: 10px;
+} 
+.login span{
+    font-size: 10px;
+}
+.nav{
+    font-size: 15px;
+    padding: 2.5vh;
+    padding-left: 7vw;
+    color: white;
+}
+.right{
+    width: 100%;
+}
+.top-nav{
+    width: 100%;
+    height: 50px;
+}
+.teachcontent{
+    width: 100%;
+    float: right;
+    margin: 10px 20px;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 1%;
+}
+
+.teachbackground{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(145, 145, 145,70%);
+}
+.chooseteachClass{
+    width: 70%;
+    height: 80%;
+    margin: 0 auto;
+    margin-top: 30px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+

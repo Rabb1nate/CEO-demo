@@ -1,0 +1,82 @@
+.test_ul {
+  width: 100px;
+  margin: 0;
+}
+
+.test_children {
+  margin-left: 500px;
+}
+
+.test {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.MyCompany_nav li {
+  display: inline;
+  margin-left: 20px;
+}
+
+.test_all {
+  height: 730px;
+  overflow: hidden;
+}
+
+#components-layout-demo-top-side-2 .logo {
+  width: 120px;
+  height: 31px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 16px 28px 16px 0;
+  float: left;
+}
+
+.site-layout-background {
+  background: #fff;
+}
+
+.margindiv {
+  margin: 20px;
+}
+
+.radius_menu {
+  border-radius: 10px;
+}
+
+.login {
+  margin-left: 20px;
+}
+
+.login_input div {
+  margin-bottom: 30px;
+  width: 380px;
+  height: 30px;
+  line-height: 30px;
+  float: right;
+  margin-left: 30px;
+}
+
+.login_input Input {
+  width: 314px;
+}
+
+.login_input .Input_password {
+  width: 314px;
+  margin-left: 13px;
+}
+
+.login_input Button {
+  width: 90px;
+  height: 30px;
+  border-radius: 8% !important;
+  margin-top: 15px;
+}
+
+Modal {
+  border-radius: 8%;
+}
+
+Content {
+  height: 870px;
+}
+/*# sourceMappingURL=style.css.map */

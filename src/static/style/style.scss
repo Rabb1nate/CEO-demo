@@ -1,0 +1,84 @@
+body {
+  min-width: 969px;
+  } 
+.test_ul{
+  width:100px;
+  margin:0;
+}
+.test_children{
+  margin-left:500px;
+}
+.test{
+  display:flex;
+}
+.MyCompany_nav li{
+  display:inline;
+  margin-left:20px;
+}
+.test_all{
+  height:730px;
+  overflow: hidden;
+}
+#components-layout-demo-top-side-2 .logo{
+  width: 120px;
+  height: 31px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 16px 28px 16px 0;
+  float: left;
+}
+.site-layout-background{
+  background: #fff;
+}
+.margindiv{
+  margin:20px;
+}
+.radius_menu{
+  border-radius:10px;
+}
+.login{
+  margin-left:20px;
+}
+.login_input{
+  div{
+    margin-bottom:30px;
+    width:380px;
+    height:30px;
+    line-height:30px;
+    float:right;
+    margin-left:30px;
+  }
+  Input{
+    width:314px;
+  }
+  .Input_password{
+    width:314px;
+    margin-left:13px;
+  }
+  Button{
+    width:90px;
+    height:30px;
+    border-radius:8% !important;
+    margin-top:15px;
+  }
+}
+Modal{
+  border-radius:8%;
+}
+Content{
+  height:870px;
+}
+.Name{
+  float:right;
+  margin-right:20px;
+  min-width:104px;
+}
+.table_div{
+  height:750px;
+}
+.RunCeo{
+  float:left;
+  margin-bottom:10px;
+}
+.level_input {
+  margin-top:20px;
+}

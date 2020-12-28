@@ -1,0 +1,17 @@
+#div{
+    display: flex;
+}
+.StuInfo{
+    width: 47%;
+    height: 90vh;
+    margin-right: 2%;
+    border: 1px dotted #cccccc;
+    border-radius: 8px;
+    /* background-color:#FAFAFA;    */
+    padding-left: 2vw;
+    padding-top: 7vh;
+}
+.button{
+    background-color: #1890FF;
+    color: white;
+}

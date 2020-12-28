@@ -1,0 +1,22 @@
+#All{
+    display: flex;
+    height: 100vh;
+}
+.nav-div{
+    width: 20%;
+}
+.nav{
+    font-size: 15px;
+    padding: 2.5vh;
+    padding-left: 7vw;
+    color: white;
+}
+.content{
+    width: 100%;
+    /* height: 100%; */
+    float: right;
+    margin: 10px 20px;
+    /* border: 1px solid #ccc; */
+    border-radius: 12px;
+    padding: 1%;
+}

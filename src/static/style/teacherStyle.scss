@@ -1,0 +1,74 @@
+p{
+    margin: 0px;
+}
+#StuInfo {
+    width: 100%;
+    .header {
+        margin-bottom: 10px;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+
+        .left {
+            display: flex;
+
+            .title {
+                font-size: 20px;
+                font-weight: bold;
+            }
+        }
+
+        .right {
+            width: auto;
+            margin-right: 10px;
+        }
+    }
+}
+
+.set {
+    .setChild {
+        margin-top: 10px;
+    }
+
+    .item3 {
+        padding: 10px 10px;
+
+        .name {
+            display: inline-block;
+            width: 250px;
+            padding: 10px;
+        }
+    }
+
+    .item {
+        padding: 10px 10px;
+
+        .name {
+            display: inline-block;
+            width: 180px;
+            padding: 10px;
+        }
+    }
+
+    .submit {
+        margin: 0px 20px;
+    }
+}
+
+.setCompany {
+    display: flex;
+
+}
+
+.notice {
+    position: absolute;
+    right: 10px;
+    bottom: 0px;
+    color: rgb(255, 127, 127);
+}
+#news{
+    .title {
+        font-size: 20px;
+        font-weight: bold;
+    }
+}
