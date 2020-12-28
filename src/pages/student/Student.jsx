@@ -94,8 +94,8 @@ class Student extends Component {
   loginClick = () => {
 
     if (this.state.userId !== "" && this.state.password !== "") {
-      this.props.login(this.state.userId, this.state.password, this.state.chooseType)
-      // this.props.login(this.state.userId, Encrypto(this.state.password), this.state.chooseType)
+      // this.props.login(this.state.userId, this.state.password, this.state.chooseType)
+      this.props.login(this.state.userId, Encrypto(this.state.password), this.state.chooseType)
 
 
       // window.location="/CEO"
