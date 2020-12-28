@@ -6,7 +6,7 @@ const newstate = {
   }
 }
 export default (state = newstate, action) => {
-  var data = {CompanyData:state.CompanyData,CeoData:state.CeoData,ApplicationData:state.ApplicationData,FileData:state.FileData}
+  var data = {CompanyData:state.CompanyData,CeoData:state.CeoData,ApplicationData:state.ApplicationData,FileData:state.FileData,MemberData:state.MemberData}
   switch (action.type) {
     case "getAllCompanies":
       return { isLogin:state.isLogin, ...data,  ...action}
@@ -83,48 +83,54 @@ export default (state = newstate, action) => {
       return {isDeleteFile:true, isLogin:state.isLogin,...data, ...action.payload}
     case "DeleteFile_NO":
       return {isDeleteFile:false, isLogin:state.isLogin,...data, ...action.payload}
+    case "ShowCompanyMember":
+      return {isLogin:state.isLogin,...data, ...action}
+    case "ShowCompanyMember_OK":
+      return {isShowCompanyMember:true, isLogin:state.isLogin,...data, MemberData:action.payload.data}
+    case "ShowCompanyMember_NO":
+      return {isShowCompanyMember:false, ...data,isLogin:state.isLogin, ...action.payload}
     case "Exist" :
       return {...data,...action,isLogin:state.isLogin}
-    // case "CEO_SET_MEMBER":
-    //   return {
-    //     ...state,
-    //     // member: action.payload.member
-    //     member: [
-    //       {
-    //         "id": 1,
-    //         "ceoId": 0,
-    //         "studentId": "1",
-    //         "companyName": "qwqw",
-    //         "position": "副总裁",
-    //         "teacherId": "tiansh"
-    //       },
-    //       {
-    //         "id": 2,
-    //         "ceoId": 0,
-    //         "studentId": "2",
-    //         "companyName": "hhhh",
-    //         "position": "副总裁",
-    //         "teacherId": "tiansh"
-    //       },
-    //       {
-    //         "id": 3,
-    //         "ceoId": 0,
-    //         "studentId": "2010211506",
-    //         "companyName": "hhhh",
-    //         "position": "ceo",
-    //         "teacherId": "tiansh"
-    //       },
-    //       {
-    //         "id": 4,
-    //         "ceoId": 0,
-    //         "studentId": "3",
-    //         "companyName": "hhhh",
-    //         "position": null,
-    //         "teacherId": "tiansh"
-    //       }
-    //       ,
-    //     ]
-    //   }
+    case "CEO_SET_MEMBER":
+      return {
+        ...state,
+        // member: action.payload.member
+        member: [
+          {
+            "id": 1,
+            "ceoId": 0,
+            "studentId": "1",
+            "companyName": "qwqw",
+            "position": "副总裁",
+            "teacherId": "tiansh"
+          },
+          {
+            "id": 2,
+            "ceoId": 0,
+            "studentId": "2",
+            "companyName": "hhhh",
+            "position": "副总裁",
+            "teacherId": "tiansh"
+          },
+          {
+            "id": 3,
+            "ceoId": 0,
+            "studentId": "2010211506",
+            "companyName": "hhhh",
+            "position": "ceo",
+            "teacherId": "tiansh"
+          },
+          {
+            "id": 4,
+            "ceoId": 0,
+            "studentId": "3",
+            "companyName": "hhhh",
+            "position": null,
+            "teacherId": "tiansh"
+          }
+          ,
+        ]
+      }
     default:
       return {...action,isLogin:state.isLogin,...data,};
   }

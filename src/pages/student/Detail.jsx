@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Table, Tag, Space,pagination, message, Button , Empty , Modal , Upload,} from 'antd';
 import actions from '../../redux/actionCreators/creators'
 import changePage from '../../until/changePage'
-import { UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined , ExclamationCircleOutlined } from '@ant-design/icons';
 import baseurl from '../../until/BaseUrl'
 // import $ from 'jquery';
 import '../../static/style/style.scss'
@@ -19,6 +19,7 @@ class Detail extends Component {
             fileList:[],
          }
          this.onPageChange=this.onPageChange.bind(this)
+         this.confirm = this.confirm.bind(this)
     }
 
     UNSAFE_componentWillUpdate(newProps,newState){
@@ -110,12 +111,13 @@ class Detail extends Component {
           }
           else{
             message.error("上传失败，文件可能为空")
+            //后端返回提示信息后再修改
             that.setState({
               uploading: false,
             })
           }
         }
-			}
+      }
 
       // $.ajax({
       //   url: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
@@ -136,6 +138,18 @@ class Detail extends Component {
       //     message.error('upload failed.');
       //   },
       // })
+    }
+    confirm(id) {
+      Modal.confirm({
+        title: '提示',
+        icon: <ExclamationCircleOutlined />,
+        content: '确定要删除文件？',
+        onOk: () => {
+          this.props.DeleteFile(id)
+        },
+        okText: '确认',
+        cancelText: '取消',
+      })
     }
     onPageChange (page,pageSize) {
         this.props.ShowFile(localStorage.getItem("class"),page)
@@ -183,7 +197,8 @@ class Detail extends Component {
               return(
                 <Space size="middle">
                 <a onClick={this.props.DownloadFile.bind(this,record.id)}>下载</a>
-                <a onClick={this.props.DeleteFile.bind(this,record.id)}>删除</a>
+                {/* <a onClick={this.props.DeleteFile.bind(this,record.id)}>删除</a> */}
+                <a onClick={this.confirm.bind(this,record.id)}>删除</a>
               </Space>
               )},
         },
@@ -193,6 +208,7 @@ class Detail extends Component {
         total:this.state.totalNum,
         onChange:this.onPageChange,
         current:this.state.currentPage,
+        hideOnSinglePage:true,
     }
     const { uploading, fileList } = this.state;
     const props = {
@@ -218,7 +234,8 @@ class Detail extends Component {
     if(localStorage.getItem("class"))
         return (
             <div className="table_div">
-              <Button className="RunCeo" type="primary" onClick={this.showModal}>上传</Button>
+              {/* <Button className="RunCeo" type="primary" onClick={this.showModal}>上传</Button> */}
+              {/* 如果需要再开启 */}
               <Modal
                 title="上传文件"
                 visible={this.state.visible}

@@ -20,7 +20,7 @@ class RouteMap extends React.Component {
                 <Route path="/Student" component={Student}/>
                 <Route path="/Teacher" component={Teacher}/>
                 <Route path="/Manager" component={Manager}/>
-                <Route path="/CEO" component={CEO}/>
+                <Route path="/CEO" component={CEO}></Route>
                 <Redirect to="/Student"/>
               </Switch>
             </Route>

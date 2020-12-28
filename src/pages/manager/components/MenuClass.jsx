@@ -10,7 +10,7 @@ import {
 import AddClass from './AddClass'
 import  DeleteClass  from './/DeleteClass'
 import ChoseClass from './ChoseTeacher'
-import ManagerApi from '../../../until/api/managerApi';
+import ManagerApi from '../../../until/api/ManagerApi';
 
 class MenuClass extends Component{
     constructor(props){

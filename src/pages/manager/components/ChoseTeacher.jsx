@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Button, Space,notification} from 'antd'
-import ManagerApi from '../../../until/api/managerApi'
+import ManagerApi from '../../../until/api/ManagerApi'
 import {Link} from "react-router-dom";
 
 class ChoseTeacher extends Component{

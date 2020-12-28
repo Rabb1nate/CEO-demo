@@ -6,8 +6,10 @@ import AllCompanies from './AllCompanies';
 import MyCompany from './MyCompany';
 import { HashRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 import Detail from './Detail'
+import CompanyMember from './CompanyMember'
 import { connect } from 'react-redux'
 import changeNav from '../../until/changeNav'
+import Encrypto from '../../until/encrypt'
 import {
   Layout,
   Menu,
@@ -25,7 +27,7 @@ import {
   VideoCameraOutlined,
   EditOutlined,
   OrderedListOutlined,
-
+  AuditOutlined,
 } from '@ant-design/icons';
 import CEO from './CEO';
 
@@ -93,6 +95,7 @@ class Student extends Component {
 
     if (this.state.userId !== "" && this.state.password !== "") {
       this.props.login(this.state.userId, this.state.password, this.state.chooseType)
+      // this.props.login(this.state.userId, Encrypto(this.state.password), this.state.chooseType)
 
 
       // window.location="/CEO"
@@ -161,13 +164,7 @@ class Student extends Component {
   componentDidMount() {
     let that = this
     that.props.Login_Check()
-    setInterval(function () {
-      if (localStorage.getItem("userId")){
-        that.props.Login_Check()
-    }
-      else {
-      }
-    }, 30000)
+
   
   }
   render() {
@@ -199,7 +196,9 @@ class Student extends Component {
               <Menu.Item key="4" icon={<OrderedListOutlined />}>
                 <Link to="/Student/CEO" onClick={changeNav.bind(this, 0, 4)}>CEO</Link>
               </Menu.Item>
-
+              <Menu.Item key="5" icon={<AuditOutlined />}>
+                <Link to="/Student/CompanyMember" onClick={changeNav.bind(this, 0, 5)}>我的公司</Link>
+              </Menu.Item>
             </Menu>
           </Sider>
           <Layout className="site-layout"
@@ -255,8 +254,7 @@ class Student extends Component {
                   />
                   <br />
                   <br />
-                  <Button>
-                    忘记密码
+                  <Button style={{ width:90 ,  }}>
       </Button>
                 </div>
               </Modal>
@@ -268,6 +266,7 @@ class Student extends Component {
                   <Route path="/Student/Detail" component={Detail} />
                   <Route path="/Student/MyCompany" component={MyCompany} />
                   <Route path="/Student/CEO" component={CEO} />
+                  <Route path="/Student/CompanyMember" component={CompanyMember} />
                   <Redirect to="/Student/AllCompanies" />
                 </Switch>
               </div>
@@ -304,6 +303,9 @@ class Student extends Component {
               <Menu.Item key="4" icon={<OrderedListOutlined />}>
                 <Link to="/Student/CEO" onClick={changeNav.bind(this, 0, 4)}>CEO</Link>
               </Menu.Item>
+              <Menu.Item key="5" icon={<AuditOutlined />}>
+                <Link to="/Student/CompanyMember" onClick={changeNav.bind(this, 0, 5)}>我的公司</Link>
+              </Menu.Item>
             </Menu>
           </Sider>
           <Layout className="site-layout"
@@ -324,6 +326,7 @@ class Student extends Component {
                   <Route path="/Student/Detail" component={Detail} />
                   <Route path="/Student/MyCompany" component={MyCompany} />
                   <Route path="/Student/CEO" component={CEO} />
+                  <Route path="/Student/CompanyMember" component={CompanyMember} />
                   <Redirect to="/Student/AllCompanies" />
                 </Switch>  
               </div>

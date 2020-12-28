@@ -23,6 +23,7 @@ import {
     FolderOpenOutlined,SettingOutlined,BarsOutlined 
 } from '@ant-design/icons';
 
+
 class Teacher extends Component { 
     constructor(props) {
         super(props);
@@ -74,7 +75,6 @@ class Teacher extends Component {
                                     <Link to="/Teacher/Download">查看上传文件</Link> 
                                 </Menu.Item>
                             </Menu>
-                            
                             <Button 
                                     type="primary" 
                                     ghost size="middle" 
@@ -101,24 +101,23 @@ class Teacher extends Component {
                                         <SignCom />  
                                     </Route>
                                     <Route path="/Teacher/Set">
-                                        <SetCom />
+                                        <SetCom></SetCom>
                                     </Route>
                                     <Route path="/Teacher/Download">
                                         <Download />  
                                     </Route>
                                 </Switch>
                             </div> 
+
+                       
+                        
                     </div>
                 </Router>
-                    <div className="teachbackground">
-                        <div className="chooseteachClass">
-                            <StuClass 
-                                handleDisTeach = {()=>{this.handleDisTeach()}}
-                                handleExit = {()=>{this.handleExit()}}
-                            />
-                        </div>
+                <div className="teachbackground">
+                    <div className="chooseteachClass">
+                        <StuClass handleDisTeach = {()=>{this.handleDisTeach()}}/>
                     </div>
-                
+                </div>
             </div>
         )
     }
@@ -136,26 +135,25 @@ class Teacher extends Component {
         if(localStorage.hasOwnProperty("teachclass")){
             this.handleDisTeach();
         }
-        if(localStorage.hasOwnProperty("userId") && localStorage.getItem("type")==="admin") {
-            this.props.history.push('/Manager');
+        if(localStorage.hasOwnProperty("userId") && localStorage.getItem("type")=="teacher"){
+            message.success("登录成功",1);
         }
-        else if(!localStorage.hasOwnProperty("userId")){
+        else {
             message.info("请先登录",1);
             this.props.history.push('/Student/AllCompanies/ChosenClasses');
         }
     }
     
     handleDisTeach = () => {
+        console.log(1);
         document.querySelector('.teachbackground').style.display = 'none';
     }
-    //退出登录
     handleExit = () => {
         LoginApi.Exit(this.state.userid).then(
             (res) => {
                 console.log(res);
                 if(res.data.flag){
-                    message.success("退出成功",1);
-                    localStorage.clear();
+                    message.success("退出成功",1)
                     this.props.history.push('/Student/AllCompanies/ChosenClasses');
                 }else{
                     message.info("退出失败，请重新登录",1)
@@ -166,7 +164,6 @@ class Teacher extends Component {
             }
         )
     }
-    //判断是否再登录状态
     isLogin = () => {
         setInterval(() => {
             LoginApi.KeepLogin(this.state.userid).then(

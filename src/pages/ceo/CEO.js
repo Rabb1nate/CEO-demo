@@ -1,38 +1,34 @@
-import React from 'react';
+import React, {memo} from 'react';
 import {connect} from 'react-redux'
-import {withRouter} from 'react-router-dom'
-
-import Application from "./views/application";
-import Company from "./views/company";
-import Router from "./components/Router";
+import {Route, Link, withRouter, Switch, Redirect} from 'react-router-dom'
+import Application from "./application/Application";
+import Position from "./position/Position";
 import WelcomeTitle from "./components/WelcomeTitle";
-import NavMenu from './components/NavMenu'
-
-import {Layout} from "antd";
+import {Layout, Menu} from "antd";
 import {setUserId} from "./store";
 
-const {Sider, Content, Header} = Layout
+const {Sider, Content} = Layout
 
 const routes = [
   {
     path: '/CEO/application',
-    name: '申请/文件',
+    name: '申请',
     component: Application
   }, {
     path: '/CEO/company',
     name: '公司',
-    component: Company
+    component: Position
   }
 ]
 
 function CEO(props) {
-  const {dispatch, history} = props
+  const {dispatch} = props
 
   let userId = localStorage.getItem('userId')
   let userName = localStorage.getItem('userName')
   let ceo = localStorage.getItem('ceo')
   if (!ceo && ceo !== '1') {
-    // history.replace('/')
+    props.history.replace('/')
   }
   dispatch(setUserId(userId))
 
@@ -43,30 +39,39 @@ function CEO(props) {
       }}
     >
       <Sider
-        theme="light"
+        theme="dark"
         style={{
+          overflow: 'auto',
           height: '100vh',
           position: 'sticky',
           top: 0,
-          left: 0
-        }}
-        width={300}
-      >
-        <NavMenu routes={routes}/>
+          left: 0,
+        }}>
+        <WelcomeTitle userName={userName} userId={userId}/>
+        <Menu theme="dark" selectedKeys={props.location.pathname}>
+          {
+            routes.map(({path, component, name}) => (
+              <Menu.Item key={path}>
+                <Link to={path}>
+                  {name}
+                </Link>
+              </Menu.Item>
+            ))
+          }
+        </Menu>
       </Sider>
-      <Layout>
-        <Header
-          style={{
-            background: '#fff',
-            boxShadow: '0 0 15px #d3d3d3'
-          }}>
-          <WelcomeTitle userName={userName} userId={userId}/>
-        </Header>
-        <Content>
-          <Router routes={routes} userId={userId}/>
-        </Content>
-      </Layout>
-
+      <Content>
+        <Switch>
+          {
+            routes.map(({path, component: Comp}) => (
+              <Route path={path} key={path}>
+                {<Comp userId={userId}/>}
+              </Route>
+            ))
+          }
+          <Redirect to="/CEO/application"/>
+        </Switch>
+      </Content>
     </Layout>
   )
 }

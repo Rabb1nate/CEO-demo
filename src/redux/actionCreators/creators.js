@@ -318,6 +318,27 @@ const actions = {
       }
     }
   },
+  ShowCompanyMember : (studentId) => {
+    return {
+      type:"ShowCompanyMember",
+      payload:{
+        studentId:studentId
+      }
+    }
+  },
+  ShowCompanyMember_OK : (data) => {
+    return {
+      type:"ShowCompanyMember_OK",
+      payload:{
+        data
+      }
+    }
+  },
+  ShowCompanyMember_NO : () => {
+    return {
+      type:"ShowCompanyMember_NO",
+    }
+  },
   Exist : () => {
     return {
       type:"Exist",
