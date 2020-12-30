@@ -339,6 +339,53 @@ const actions = {
       type:"ShowCompanyMember_NO",
     }
   },
+  RunScore : (score,scored) => {
+    return {
+      type:"RunScore",
+      payload:{
+        scorer:localStorage.getItem("userId"),
+        scored:scored,
+        score:score
+      }
+    }
+  },
+  RunScore_OK : (message) => {
+    return {
+      type:"RunScore_OK",
+      payload:{
+        message:message
+      }
+    }
+  },  
+  RunScore_NO : (message) => {
+    return {
+      type:"RunScore_NO",
+      payload:{
+        message:message
+      }
+    }
+  },
+  ShowNumber : (studentId) => {
+    return {
+      type:"ShowNumber",
+      payload:{
+        studentId:studentId
+      }
+    }
+  },
+  ShowNumber_OK : (data) => {
+    return {
+      type:"ShowNumber_OK",
+      payload:{
+        data
+      }
+    }
+  },
+  ShowNumber_NO : () => {
+    return {
+      type:"ShowNumber_NO",
+    }
+  },
   Exist : () => {
     return {
       type:"Exist",

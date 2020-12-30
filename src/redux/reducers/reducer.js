@@ -6,7 +6,14 @@ const newstate = {
   }
 }
 export default (state = newstate, action) => {
-  var data = {CompanyData:state.CompanyData,CeoData:state.CeoData,ApplicationData:state.ApplicationData,FileData:state.FileData,MemberData:state.MemberData}
+  var data = {
+    CompanyData:state.CompanyData,
+    CeoData:state.CeoData,
+    ApplicationData:state.ApplicationData,
+    FileData:state.FileData,
+    MemberData:state.MemberData,
+    NumberData:state.NumberData
+  }
   switch (action.type) {
     case "getAllCompanies":
       return { isLogin:state.isLogin, ...data,  ...action}
@@ -89,6 +96,18 @@ export default (state = newstate, action) => {
       return {isShowCompanyMember:true, isLogin:state.isLogin,...data, MemberData:action.payload.data}
     case "ShowCompanyMember_NO":
       return {isShowCompanyMember:false, ...data,isLogin:state.isLogin, ...action.payload}
+    case "RunScore":
+      return {isLogin:state.isLogin,...data, ...action}
+    case "RunScore_OK":
+      return {isRunScore:true, isLogin:state.isLogin,...data, MemberData:action.payload.data}
+    case "RunScore_NO":
+      return {isRunScore:false, ...data,isLogin:state.isLogin, ...action.payload}
+    case "ShowNumber":
+      return {isLogin:state.isLogin,...data, ...action}
+    case "ShowNumber_OK":
+      return {isShowNumber:true, isLogin:state.isLogin,...data, NumberData:action.payload.data}
+    case "ShowNumber_NO":
+      return {isShowNumber:false, ...data,isLogin:state.isLogin, ...action.payload}
     case "Exist" :
       return {...data,...action,isLogin:state.isLogin}
     case "CEO_SET_MEMBER":

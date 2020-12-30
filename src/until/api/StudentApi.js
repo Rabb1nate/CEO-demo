@@ -66,5 +66,16 @@ const StudentApi = {
                 ...payload
         })
     },
+    RunScore : (payload) => {
+        return Service.post('/score/stuScore',{
+                ...payload
+        })
+    },
+    ShowNumber : (payload) => {
+        return Service.post('/score/showScoreNum',{
+                ...payload
+        })
+    },
+    
 }
 export default StudentApi

@@ -103,6 +103,7 @@ class Detail extends Component {
 				if(ajax.readyState == 4){
 					if(ajax.status == 200 && JSON.parse(ajax.response).flag){
             message.success("上传成功")
+            console.log(ajax.response)
             that.setState({
               uploading: false,
             })
@@ -111,6 +112,7 @@ class Detail extends Component {
           }
           else{
             message.error("上传失败，文件可能为空")
+            console.log(ajax.response)
             //后端返回提示信息后再修改
             that.setState({
               uploading: false,
@@ -234,7 +236,7 @@ class Detail extends Component {
     if(localStorage.getItem("class"))
         return (
             <div className="table_div">
-              {/* <Button className="RunCeo" type="primary" onClick={this.showModal}>上传</Button> */}
+              <Button className="RunCeo" type="primary" onClick={this.showModal}>上传</Button>
               {/* 如果需要再开启 */}
               <Modal
                 title="上传文件"

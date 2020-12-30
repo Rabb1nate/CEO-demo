@@ -111,6 +111,7 @@ class CEO extends Component {
           render: (text, record) => (
             <Space size="middle">
               <a onClick={this.props.VoteForCeo.bind(this,record.studentId,localStorage.getItem("userId"))}>为{record.userName}投票</a>
+              
             </Space>
           ),
         },

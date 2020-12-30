@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { Table,  Space,   message, Button, Empty } from 'antd';
+import { Table,  Space,   message, Button, Empty , Modal, Input, } from 'antd';
 import actions from '../../redux/actionCreators/creators'
 import changePage from '../../until/changePage'
 import '../../static/style/style.scss'
@@ -11,8 +11,11 @@ class CompanyMember extends Component {
         this.state = { 
             totalNum:0,
             currentPage:parseInt(sessionStorage.getItem("Page5"))||1,
+            visible: false,
+            score:'',
             data : [
               ],
+            NumberData:'',
          }
          this.onPageChange=this.onPageChange.bind(this)
     }
@@ -20,17 +23,15 @@ class CompanyMember extends Component {
     UNSAFE_componentWillUpdate(newProps,newState){
       if(newProps!==this.props){
         try{
-          if( newProps.isVoteForCeo === true )
-          message.success("投票成功")
           if( newProps.message ){
-            if( newProps.isRunCeo === true ){
-              message.success(newProps.message)
-            }
-            else if(newProps.isVoteForCeo === false || newProps.isRunCeo === false ){
+            if( newProps.isRunScore === true )
+            message.success("打分成功")
+            else if(newProps.isRunScore === false ){
               message.error(newProps.message)
             }
           }
           const {MemberData} = newProps
+          const {NumberData} = newProps
           let newdata = MemberData.object
           for (let item in newdata){
             newdata[item].key = item
@@ -38,7 +39,8 @@ class CompanyMember extends Component {
           this.setState({
             currentPage: parseInt(sessionStorage.getItem("Page5"))||1,
             data:newdata,
-            totalNum:MemberData.totalNumber
+            totalNum:MemberData.totalNumber,
+            NumberData:NumberData,
           })
         
         }
@@ -48,6 +50,7 @@ class CompanyMember extends Component {
     componentDidMount() {
       if(localStorage.getItem("userId") && !this.props.MemberData){
         this.props.ShowCompanyMember(localStorage.getItem("userId"))
+        this.props.ShowNumber(localStorage.getItem("userId"))
       }
       if(this.props.MemberData){
         this.props.Exist()
@@ -60,6 +63,28 @@ class CompanyMember extends Component {
       else {
         return false
       }
+    }
+    scoreChange(e) {
+      const value = e.target.value.replace(/[^\-?\d.]/g,'')
+      this.setState({
+        score: value,
+      })
+    }
+    showModal = () => {
+      this.setState({
+        visible: true,
+      })
+    }
+    handleOk = e => {
+  
+      this.setState({
+        visible: false,
+      });
+    };
+    handleCancel = e => {
+      this.setState({
+        visible: false,
+      })
     }
     
     onPageChange (page,pageSize) {
@@ -106,7 +131,33 @@ class CompanyMember extends Component {
           key: 'action',
           render: (text, record) => (
             <Space size="middle">
-              <a onClick={this.props.VoteForCeo.bind(this,record.studentId,localStorage.getItem("userId"))}>为{record.userName}投票</a>
+              <a onClick={this.showModal}>为{record.userName}投票</a>
+              <Modal
+                title="打分"
+                visible={this.state.visible}
+                onOk={this.handleOk}
+                onCancel={this.handleCancel}
+                footer={
+                    <Button
+                      type="primary"
+                      onClick={this.props.RunScore.bind(this,this.state.score,record.studentId)}
+                    >确认打分</Button>
+
+                }
+              >
+                <div className="login_input">
+                  <div>
+                    分数：
+                    <Input
+                      placeholder="请输入分数"
+                      onChange={this.scoreChange}
+                      value={this.state.score}
+                    />
+                  </div>
+                  <Button style={{ width:90 ,  }}>
+      </Button>
+                </div>
+              </Modal>
             </Space>
           ),
         },
@@ -121,6 +172,7 @@ class CompanyMember extends Component {
     if (localStorage.getItem("userId")){
         return ( 
             <div className="table_div">
+              {this.state.NumberData}
             <Table columns={columns} dataSource={this.state.data} pagination={pagination}/>
             </div>
              )
@@ -140,11 +192,11 @@ const mapDispatchToProps = (dispatch) => {
     ShowCompanyMember: (studentId) => {
         dispatch(actions.ShowCompanyMember(studentId))
     },
-    VoteForCeo: (ceoId,studentId) => {
-        dispatch(actions.VoteForCeo(ceoId,studentId))
+    RunScore: (score,scored) => {
+        dispatch(actions.RunScore(score,scored))
     },
-    RunCeo: () => {
-      dispatch(actions.RunCeo())
+    ShowNumber: (studentId) => {
+      dispatch(actions.ShowNumber(studentId))
     },
     Exist: () => {
       dispatch(actions.Exist())

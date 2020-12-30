@@ -19,7 +19,7 @@ import {
   Radio,
   message,
   Popover,
-} from 'antd';
+} from 'antd'
 import actions from '../../redux/actionCreators/creators'
 
 import {
@@ -68,8 +68,8 @@ class Student extends Component {
   showModal = () => {
     this.setState({
       visible: true,
-    });
-  };
+    })
+  }
   handleOk = e => {
 
     this.setState({
@@ -79,12 +79,12 @@ class Student extends Component {
   handleCancel = e => {
     this.setState({
       visible: false,
-    });
-  };
+    })
+  }
   hide = () => {
     this.setState({
       loginVisible: false,
-    });
+    })
   }
   exit = () => {
     this.props.Exit()
