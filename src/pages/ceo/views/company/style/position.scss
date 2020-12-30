@@ -12,7 +12,7 @@ ul {
 
   .card {
     height: 100%;
-    width: 30%;
+    //width: 30%;
     margin: 0 20px 20px;
 
     p {
@@ -27,11 +27,36 @@ ul {
     color: #a1a1a1;
   }
 }
+
 .my-company {
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 16px;
 }
+
+.flex_grid {
+  display: flex;
+  justify-content: space-between;
+
+  .item {
+    margin: 5px 0;
+
+    .dscr {
+      margin-right: 5px;
+      color: #8e8e8e
+    }
+  }
+}
+
 .rename-btn {
   margin-left: 15px;
   font-size: 12px;
+}
+
+.dscr {
+  font-size: 14px;
+  color: #9a9a9a;
+  margin: 5px 5px 5px 0;
+}
+
+.row {
+  margin: 5px 0;
 }

@@ -16,6 +16,7 @@ class Detail extends Component {
             currentPage:parseInt(sessionStorage.getItem("Page4"))||1,
             data : [],
             visible:false,
+            loading:true,
             fileList:[],
          }
          this.onPageChange=this.onPageChange.bind(this)
@@ -41,7 +42,8 @@ class Detail extends Component {
           this.setState({
             currentPage: parseInt(sessionStorage.getItem("Page4"))||1,
             data:newdata,
-            totalNum:totalNumber
+            totalNum:totalNumber,
+            loading:false,
           })
         }
         catch{}
@@ -103,7 +105,6 @@ class Detail extends Component {
 				if(ajax.readyState == 4){
 					if(ajax.status == 200 && JSON.parse(ajax.response).flag){
             message.success("上传成功")
-            console.log(ajax.response)
             that.setState({
               uploading: false,
             })
@@ -112,7 +113,6 @@ class Detail extends Component {
           }
           else{
             message.error("上传失败，文件可能为空")
-            console.log(ajax.response)
             //后端返回提示信息后再修改
             that.setState({
               uploading: false,
@@ -262,7 +262,7 @@ class Detail extends Component {
           {uploading ? '上传中' : '上传文件'}
         </Button>
               </Modal>
-            <Table columns={columns} dataSource={this.state.data} pagination={pagination}/>
+            <Table columns={columns} dataSource={this.state.data} pagination={pagination} loading={this.state.loading}/>
             </div>
              )
     else return(

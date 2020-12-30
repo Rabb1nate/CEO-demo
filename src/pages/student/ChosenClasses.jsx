@@ -9,6 +9,7 @@ class ChosenClasses extends Component {
         super(props);
         this.state = { 
             currentPage:parseInt(sessionStorage.getItem("Page1"))||1,
+            loading:true,
             data : [],
          }
         //  this.onPageChange=this.onPageChange.bind(this)
@@ -31,7 +32,8 @@ class ChosenClasses extends Component {
           }
           this.setState({
             currentPage: parseInt(sessionStorage.getItem("Page1"))||1,
-            data:newdata
+            data:newdata,
+            loading:false,
           })
         }
         catch{}
@@ -97,7 +99,7 @@ class ChosenClasses extends Component {
           key: 'action',
           render: (text, record) => (
             <Space size="middle">
-              <a onClick={this.props.VoteForCompany.bind(this,localStorage.getItem("userId"),record.ceo)}>为{record.companyName}投票</a>
+              <a onClick={this.props.VoteForCompany.bind(this,localStorage.getItem("userId"),record.ceo)}>投票</a>
             </Space>
           ),
         },
@@ -105,7 +107,7 @@ class ChosenClasses extends Component {
       if(localStorage.getItem("userId"))
         return (
           <div className="table_div">
-            <Table columns={columns} dataSource={this.state.data} pagination={pagination}/>
+            <Table columns={columns} dataSource={this.state.data} pagination={pagination} loading={this.state.loading}/>
             </div>
              )
       else return(

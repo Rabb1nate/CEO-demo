@@ -69,11 +69,15 @@ class StuInfo extends Component {
   changePage = (page) => {
     let lists = [];
     showAll(this.state.teachclass,page).then((res) => {
+      if(!res.data.flag && res.data.message === "没有登录，请先登录"){
+        localStorage.clear();
+        this.props.history.push('/Student/AllCompanies/ChosenClasses');
+      }
       this.setState({loading:false});
       let rs = JSON.parse(res.data);
       let companyName
-      for(let i = 0;i<rs.length;i++){
-        if(rs[i].companyName === undefined || rs[i].companyName == "null")
+      for (let i = 0; i < rs.length; i++){
+        if(rs[i].companyName === undefined|| rs[i].companyName === null)
           companyName = "无"
         else companyName = rs[i].companyName
         lists.push({

@@ -6,19 +6,15 @@ import axios from 'axios';
 import '../style/ImData.css';
 
 
-
 class ImData extends Component {
   constructor(props) { 
     super(props);
     this.state = {
-      stuList: [],
+
       classList:[],
-      uploadingStu: false,
       uploadingClass:false
     }
-    this.handleUploadStu = this.handleUploadStu.bind(this);
     this.handleUploadClass = this.handleUploadClass.bind(this);
-    this.handleStatusStu = this.handleStatusStu.bind(this);
     this.handleStatusClass = this.handleStatusClass.bind(this);
     this.Ajax = this.Ajax.bind(this);
   }
@@ -57,34 +53,6 @@ class ImData extends Component {
   }
 
 
-
-  handleUploadStu = () => {
-    const { stuList } = this.state;
-    const formData = new FormData();
-    stuList.forEach(file => {
-      formData.append('stufile', file);
-    });
-    this.setState({
-      uploadingStu: true
-    });
-    this.Ajax(0, baseurl + '/admin/stufile', formData);
-    
-  };
-
-  handleStatusStu = (status) => { 
-    console.log(status);
-
-    if (status == true) { 
-      this.setState({
-        uploadingStu: false,
-        stuList:[]
-      });
-
-    }
-      
-  }
-
-
   handleUploadClass = () => {
     const { classList } = this.state;
     const formData = new FormData();
@@ -109,29 +77,20 @@ class ImData extends Component {
     
   }
   
+  IsDisabled = () => { 
+    if (this.state.classList.length == 0) {
+      console.log(this.state.classList.length);
+      return true;
+    }
+    else if (this.state.classList.length > 1) {
+      console.log(this.state.classList.length);
+      message.warning('只能上传一份文件');
+      return true;
+    }
+    
+  }
   render() {
-    const { uploadingStu,uploadingClass, stuList,classList } = this.state;
-    const stuprops = {
-      onRemove: file => {
-        this.setState(state => {
-          const index = state.stuList.indexOf(file);
-          const newstuList = state.stuList.slice();
-          newstuList.splice(index, 1);
-          return {
-            stuList: newstuList,
-          };
-        });
-      },
-      beforeUpload: file => {
-        this.setState(state => ({
-          stuList: [...state.stuList, file],
-        }));
-        return false;
-      },
-      stuList,
-    };
-
-
+    const { uploadingClass,classList } = this.state;
     const classprops = {
       onRemove: file => {
         this.setState(state => {
@@ -139,14 +98,17 @@ class ImData extends Component {
           const newclassList = state.classList.slice();
           newclassList.splice(index, 1);
           return {
-            classsList: newclassList,
+            classList: newclassList,
           };
         });
+       
       },
       beforeUpload: file => {
+        console.log(this.state.classList)
         this.setState(state => ({
           classList: [...state.classList, file],
         }));
+        this.IsDisabled();
         return false;
       },
       // classList,
@@ -154,31 +116,17 @@ class ImData extends Component {
     
     return (
       <>
-        <div id="div">
-          <div className="StuInfo">
-              <Upload {...stuprops}>
-
-                  <Button icon={<UploadOutlined />} className="button">导入教学信息</Button>
-
-              </Upload>
-              <Button
-                    onClick={this.handleUploadStu}
-                    disabled={stuList.length === 0  || stuList.length>1}
-                    loading={uploadingStu}
-                    style={{ marginTop: 16 }}
-                  >
-                    {uploadingStu ? '上传中' : '开始上传'}
-              </Button>
+        <div>
+          <div>
+              <span className="Nav-top">导入数据</span>
           </div>
           <div className="StuInfo">
               <Upload {...classprops}>
-
                   <Button icon={<UploadOutlined />} className="button">更新学生信息</Button>
               </Upload>
               <Button
                     onClick={this.handleUploadClass}
-                    disabled={classList.length === 0  }
-
+                    disabled={this.IsDisabled()}
                     loading={uploadingClass}
                     style={{ marginTop: 16 }}
                   >
@@ -192,7 +140,4 @@ class ImData extends Component {
   }
 }
 
-
 export default ImData;
-
-

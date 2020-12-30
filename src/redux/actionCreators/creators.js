@@ -386,6 +386,48 @@ const actions = {
       type:"ShowNumber_NO",
     }
   },
+  ShowScore : (studentId) => {
+    return {
+      type:"ShowScore",
+      payload:{
+        studentId:studentId
+      }
+    }
+  },
+  ShowScore_OK : (data) => {
+    return {
+      type:"ShowScore_OK",
+      payload:{
+        data
+      }
+    }
+  },
+  ShowScore_NO : () => {
+    return {
+      type:"ShowScore_NO",
+    }
+  },
+  ShowCompany : (studentId) => {
+    return {
+      type:"ShowCompany",
+      payload:{
+        studentId:studentId
+      }
+    }
+  },
+  ShowCompany_OK : (data) => {
+    return {
+      type:"ShowCompany_OK",
+      payload:{
+        data
+      }
+    }
+  },
+  ShowCompany_NO : () => {
+    return {
+      type:"ShowCompany_NO",
+    }
+  },
   Exist : () => {
     return {
       type:"Exist",

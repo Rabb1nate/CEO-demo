@@ -3,7 +3,7 @@ import { Table, Space,Input,Button, notification,message } from 'antd';
 import { AudioOutlined } from '@ant-design/icons';
 // import '../style/VoSit.css';
 import {showCeo, runCeo, closeCeo,decideCeo,deleteCeo,isRunVote} from '../../../until/api/teacherApi';
-
+import LoginApi from '../../../until/api/LoginApi';
 //table的静态内容
 
 
@@ -122,7 +122,6 @@ class VotSit extends Component {
       })
       showCeo(currentPage,this.state.teachclass).then(
         (res) => {
-          
           if(res.data.data.object.length !== 0){ 
             let pagination = {...this.state.pagination};
             pagination.total = res.data.data.totalNumber;
@@ -132,6 +131,9 @@ class VotSit extends Component {
             pagination
             })
             this.addAction(this.state.dataSource);
+          }else if(!res.data.flag && res.data.message === "没有登录，请先登录"){
+            localStorage.clear();
+            this.props.history.push('/Student/AllCompanies/ChosenClasses');
           }else{
             this.setState({
               loading:false
@@ -158,6 +160,10 @@ class VotSit extends Component {
     isRunVote = () => {
       isRunVote(this.state.teachclass).then(
         (res)=>{
+          if(!res.data.flag && res.data.message === "没有登录，请先登录"){
+          localStorage.clear();
+          this.props.history.push('/Student/AllCompanies/ChosenClasses');
+        }
           this.setState({
             isrunvote:res.data.data
           },
@@ -166,6 +172,9 @@ class VotSit extends Component {
               this.setState({
                 btuValue:"关闭投票"
               })
+            }else if(!res.data.flag && res.data.message === "没有登录，请先登录"){
+              localStorage.clear();
+              this.props.history.push('/Student/AllCompanies/ChosenClasses');
             }else{
               this.setState({
                 btuValue:"开启投票"
@@ -184,7 +193,10 @@ class VotSit extends Component {
         
         closeCeo(this.state.teachclass).then(
         (res) => {
-          console.log(res);
+          if(!res.data.flag && res.data.message === "没有登录，请先登录"){
+            localStorage.clear();
+            this.props.history.push('/Student/AllCompanies/ChosenClasses');
+          }
           this.setState({
             btuValue:"开启投票",
             isrunvote:!this.state.isrunvote
@@ -222,24 +234,34 @@ class VotSit extends Component {
         decideCeo(record.studentId).then(
           (res) => {
             console.log(res);
+            message.success("任命成功",1);
           },(err) => {
-            console.log(err);
+            message.warn("任命失败，请重试",1);
           }
         )
       }else{
-        record.action = "任命为CEO";
-        this.setState({
-          dataSource: this.state.dataSource
-        })
+        
+        
+        //取消为CEO
         deleteCeo(record.studentId).then(
           (res) => {
-            console.log(res);
+            if(res.data.flag){
+              message.success("取消成功");
+              record.action = "任命为CEO";
+              this.setState({
+                  dataSource: this.state.dataSource
+              }) 
+            }else if(!res.data.flag){
+              message.warn(res.data.message,1);
+            }
+
           },(err) => {
             console.log(err);
           }
         )
+        
+
       }
-      console.log(record);
     }
 
     //为dataSource增加action
@@ -253,7 +275,6 @@ class VotSit extends Component {
           action = '取消为CEO';
         }
         dataSource[i].action = action;
-        
       }
       this.setState({
           dataSource:dataSource

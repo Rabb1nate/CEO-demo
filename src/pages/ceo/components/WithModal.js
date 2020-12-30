@@ -4,12 +4,15 @@ import {Modal} from "antd";
 const WithModal = (props) => {
   const {render, children} = props
   const [visible, setVisible] = useState(false)
+  const cancel = () => {
+    setVisible(false)
+  }
   return (
     <>
       {
         render({
           onClick: setVisible.bind(null, true)
-        })
+        }, cancel)
       }
       <Modal
         visible={visible}

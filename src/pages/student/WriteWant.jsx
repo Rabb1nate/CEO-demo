@@ -16,6 +16,7 @@ class WriteWant extends Component {
             value4: "",
             value5: "",
             value6: "",
+            b_loading:false,
             data:[],
          }
     }
@@ -66,7 +67,7 @@ class WriteWant extends Component {
                   level:i
               })
           }
-          this.props.AddApplication(applications)
+          this.props.AddApplication(applications,this)
           }
         else{
           message.error("请补全信息")
@@ -77,13 +78,26 @@ class WriteWant extends Component {
         if(newProps!==this.props){
           try{
             if(newProps.message){
-              if(newProps.isAddApplication === true )
-              message.success(newProps.message)
-              if(newProps.isAddApplication === false )
-              message.error(newProps.message)
+              if(newProps.isAddApplication === true ){
+                message.success("申请成功")
+                this.setState({
+                  b_loading:false
+                })
+                this.props.history.push("/Student/MyCompany/Join")
+              }
+              if(newProps.isAddApplication === false ){
+                message.error(newProps.message)
+                this.setState({
+                  b_loading:false
+                })
+              }
             }
             if(!newProps.message && newProps.isAddApplication === true){
                 message.success("申请成功")
+                this.setState({
+                  b_loading:false
+                })
+                this.props.history.push("/Student/MyCompany/Join")
             }
 
                 const {CompanyData} = newProps
@@ -190,7 +204,7 @@ class WriteWant extends Component {
             )})}
             </Select>
             </div>,
-                <Button type="primary" size="middle" onClick={this.SubmitApplication}>提交</Button>
+                <Button type="primary" size="middle" onClick={this.SubmitApplication} loading={this.state.b_loading}>提交</Button>
                 </div>
                 </div>
                 )
@@ -202,8 +216,11 @@ class WriteWant extends Component {
         }
 const mapDispatchToProps = (dispatch) => {
     return {
-      AddApplication: (applications) => {
+      AddApplication: (applications,that) => {
         dispatch(actions.AddApplication(applications))
+        that.setState({
+          b_loading:true
+        })
       },
       getAllCompanies: (userId) => {
         dispatch(actions.getAllCompanies(userId))

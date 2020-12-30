@@ -1,6 +1,6 @@
 .status {
-  border-radius: 2px;
-  padding: .5em;
+  border-radius: 2em;
+  padding: .5em 1em;
   &.pass {
     background: #dcffae;
     color: green;
@@ -8,5 +8,20 @@
   &.reject {
     background: #ffacb0;
     color: #a10000;
+  }
+}
+.upload-btn {
+  padding: 1em;
+  background: #fff;
+  text-align: center;
+  width: 150px;
+  display: block;
+  height: 50px;
+  cursor: pointer;
+  box-shadow: 0 0 15px #f7f7f7;
+  transition: .2s;
+
+  &:hover {
+    box-shadow: 0 0 30px #EBEBEB
   }
 }

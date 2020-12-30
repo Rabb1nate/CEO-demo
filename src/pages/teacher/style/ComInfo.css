@@ -15,6 +15,9 @@
 .InpSco{
     width: 70%;
     border: none;
+    border:1px solid #cccccc;
+    padding: 1%;
+    border-radius: 2px;
 }
 .InpSco:focus{
     outline: none;
@@ -29,6 +32,8 @@
     color: white;
     border: none;
     font-size: 2vh;
+    padding: 2%;
+
 }
 .InpBut:hover{
     cursor: pointer;

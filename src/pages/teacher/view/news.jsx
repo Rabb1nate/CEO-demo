@@ -99,7 +99,7 @@ class newLists extends React.Component {
     //直接用 this.state.pagination.current 调用数据？
     console.log(record);//这是这一行的数据
     // console.log(store.getState());
-    agreeChange(record.id, record.error).then((rs) => {
+    agreeChange(record.id, record.error,localStorage.teachclass).then((rs) => {
       let res = rs.data;
       console.log(res);
       if (res.flag === true) {
@@ -181,6 +181,10 @@ class newLists extends React.Component {
     // }
     changeCompanyName(this.state.teachclass, newPage, "1").then(
       res => {
+        if(!res.data.flag && res.data.message === "没有登录，请先登录"){
+          localStorage.clear();
+          this.props.history.push('/Student/AllCompanies/ChosenClasses');
+        }
         this.setState({ loading: false })
         let rs = JSON.parse(res.data);
         if (rs.length === 0) {

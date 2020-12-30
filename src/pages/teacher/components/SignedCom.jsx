@@ -4,6 +4,7 @@ import { showAll, setNosign} from '../../../until/api/teacherApi'
 import '../../../static/style/teacherStyle.scss'
 class SignedCom extends React.Component {
   constructor(props) {
+    localStorage.setItem("signKey",JSON.stringify({key:1,route:'/Teacher/Sign/Signed'}))
     super(props)
     this.state = {
       teachclass: localStorage.getItem("teachclass"),
@@ -66,6 +67,10 @@ class SignedCom extends React.Component {
   changePage = (page) => {
     let lists = [];
     showAll(this.state.teachclass, page).then((res) => {
+      if(!res.data.flag && res.data.message === "没有登录，请先登录"){
+        localStorage.clear();
+        this.props.history.push('/Student/AllCompanies/ChosenClasses');
+      }
       this.setState({ loading: false });
       let rs = JSON.parse(res.data);
       for (let i = 0; i < rs.length; i++) {
@@ -123,6 +128,10 @@ class SignedCom extends React.Component {
 
     setNosign("SJ00201A2031780003", record.id, 10, 1).then(rs => {
       console.log(rs.data);
+      if(!rs.data.flag && rs.data.message === "没有登录，请先登录"){
+        localStorage.clear();
+        this.props.history.push('/Student/AllCompanies/ChosenClasses');
+      }
       let res = rs.data;
       if (res.flag == true) {
         let data = this.state.data;
@@ -146,6 +155,10 @@ class SignedCom extends React.Component {
   dropClass = (record, index) => {
     setNosign(this.state.teachclass, record.id, 10, 2).then(rs => {
       let res = rs.data
+      if(!rs.data.flag && rs.data.message === "没有登录，请先登录"){
+        localStorage.clear();
+        this.props.history.push('/Student/AllCompanies/ChosenClasses');
+      }
       console.log(rs);
       if (res.flag == true) {
         let data = this.state.data;

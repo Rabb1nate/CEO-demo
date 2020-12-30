@@ -15,7 +15,14 @@ const { TabPane } = Tabs;
 class Set extends React.Component {
     constructor(props) {
         super(props)
+        if(localStorage.getItem("setKey")===null){
+            console.log("hahahmeiyou");
+            localStorage.setItem("setKey",JSON.stringify({key:1,route:'/Teacher/Set/Person'}))
+         }
+         let setKey = JSON.parse(localStorage.getItem("setKey"))
         this.state = {
+            route:setKey.route,
+            num:JSON.stringify(setKey.key),
             person: "",
             company: "",
             other: "",
@@ -25,23 +32,23 @@ class Set extends React.Component {
     render() {
         return (
             <div className="set">
-                <Menu theme="light" mode="horizontal" defaultSelectedKeys="1" style={{ marginTop: -10 }}>
+                <Menu theme="light" mode="horizontal" defaultSelectedKeys={this.state.num} style={{ marginTop: -10 }}>
                     <Menu.Item key="1" style={{margin:'0'}}><Link to="/Teacher/Set/Person">个人成绩占比</Link></Menu.Item>
                     <Menu.Item key="2"><Link to="/Teacher/Set/Company">公司成绩占比</Link></Menu.Item>
                     <Menu.Item key="3"><Link to="/Teacher/Set/Other">其他占比</Link></Menu.Item>
                 </Menu>
                 <Switch>
-                    <Route path="/Teacher/Set/Person" exact>
+                    <Route path="/Teacher/Set/Person">
                         <SetPersonal person={this.state.person}></SetPersonal>
                     </Route>
-                    <Route path="/Teacher/Set/Company" exact>
+                    <Route path="/Teacher/Set/Company">
                         <SetCompany></SetCompany>
                     </Route>
-                    <Route path="/Teacher/Set/Other" exact>
+                    <Route path="/Teacher/Set/Other">
                         <SetOther></SetOther>
                     </Route>
                 </Switch>
-                <Redirect from="/Teacher/Set" to="/Teacher/Set/Person"></Redirect>
+                <Redirect from="/Teacher/Set" to={this.state.route}></Redirect>
                 {/* <Tabs defaultActiveKey="1" size="middle" style={{ marginTop: -10 }}>
                     <TabPane tab="个人成绩占比" key="1">
                         <SetPersonal></SetPersonal>

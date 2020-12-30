@@ -8,7 +8,7 @@ export default props => {
       {
         routes.map(({path, component: Comp}) => (
           <Route path={path} key={path}>
-            <Comp userId={userId}/>
+            <Comp {...props}/>
           </Route>
         ))
       }

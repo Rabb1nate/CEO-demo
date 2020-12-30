@@ -4,13 +4,14 @@ import { Table,  Space,   message, Button, Empty } from 'antd';
 import actions from '../../redux/actionCreators/creators'
 import changePage from '../../until/changePage'
 import '../../static/style/style.scss'
-
 class CEO extends Component {
     constructor(props) {
         super(props);
         this.state = { 
             totalNum:0,
             currentPage:parseInt(sessionStorage.getItem("Page2"))||1,
+            loading:true,
+            b_loading:false,
             data : [
               ],
          }
@@ -25,9 +26,15 @@ class CEO extends Component {
           if( newProps.message ){
             if( newProps.isRunCeo === true ){
               message.success(newProps.message)
+              this.setState({
+                b_loading:false,
+              })
             }
             else if(newProps.isVoteForCeo === false || newProps.isRunCeo === false ){
               message.error(newProps.message)
+              this.setState({
+                b_loading:false,
+              })
             }
           }
           const {CeoData} = newProps
@@ -38,7 +45,8 @@ class CEO extends Component {
           this.setState({
             currentPage: parseInt(sessionStorage.getItem("Page2"))||1,
             data:newdata,
-            totalNum:CeoData.totalNumber
+            totalNum:CeoData.totalNumber,
+            loading:false,
           })
         
         }
@@ -110,7 +118,7 @@ class CEO extends Component {
           key: 'action',
           render: (text, record) => (
             <Space size="middle">
-              <a onClick={this.props.VoteForCeo.bind(this,record.studentId,localStorage.getItem("userId"))}>为{record.userName}投票</a>
+              <a onClick={this.props.VoteForCeo.bind(this,record.studentId,localStorage.getItem("userId"))}>投票</a>
               
             </Space>
           ),
@@ -126,8 +134,8 @@ class CEO extends Component {
     if (localStorage.getItem("userId")){
         return ( 
             <div className="table_div">
-            <Button type="primary" className="RunCeo" onClick={this.props.RunCeo}>成为CEO</Button>
-            <Table columns={columns} dataSource={this.state.data} pagination={pagination}/>
+            <Button type="primary" className="RunCeo" onClick={this.props.RunCeo.bind(this,this)} loading={this.state.b_loading}>成为CEO</Button>
+            <Table columns={columns} dataSource={this.state.data} pagination={pagination} loading={this.state.loading}/>
             </div>
              )
         }
@@ -149,8 +157,11 @@ const mapDispatchToProps = (dispatch) => {
     VoteForCeo: (ceoId,studentId) => {
         dispatch(actions.VoteForCeo(ceoId,studentId))
     },
-    RunCeo: () => {
+    RunCeo: (that) => {
       dispatch(actions.RunCeo())
+      that.setState({
+        b_loading:true
+      })
     },
     Exist: () => {
       dispatch(actions.Exist())

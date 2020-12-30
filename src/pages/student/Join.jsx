@@ -12,6 +12,7 @@ class Join extends Component {
         this.state = { 
             totalNum:0,
             currentPage:parseInt(sessionStorage.getItem("Page3"))||1,
+            loading:true,
             data : [
               ],
          }
@@ -29,7 +30,8 @@ class Join extends Component {
           this.setState({
             currentPage: parseInt(sessionStorage.getItem("Page3"))||1,
             data:newdata,
-            totalNum:ApplicationData.totalNumber
+            totalNum:ApplicationData.totalNumber,
+            loading:false,
           })
         
         }
@@ -104,7 +106,7 @@ class Join extends Component {
     if(localStorage.getItem("userId"))
         return ( 
             <div className="table_div">
-            <Table columns={columns} dataSource={this.state.data} pagination={pagination}/>
+            <Table columns={columns} dataSource={this.state.data} pagination={pagination} loading={this.state.loading}/>
             </div>
              )
     else return(

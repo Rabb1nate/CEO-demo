@@ -23,14 +23,13 @@ class DeleteClass extends Component{
                 showSizeChanger:false,
                 defaultCurrent:1,
                 current: 1,
-                pageSize: 5,
+                pageSize: 7,
                 total:'',
                 hideOnSinglePage: true,
                 onChange: (page, pageSize) => {
-                console.log(this.changePage);
-                this.changePage(this.props.teacherId,page);
-                this.state.pagination.current = page
-            }
+                    this.changePage(page);
+                    this.state.pagination.current = page
+                }
             }  
         }
         this.changePage = this.changePage.bind(this);
@@ -60,21 +59,27 @@ class DeleteClass extends Component{
     }
     componentDidMount(){
         console.log("delete");
-        this.changePage(localStorage.getItem("teachclass"),1);
+        this.changePage(1);
     }
-    changePage = (teacherId,currentPage) => {
+    changePage = (currentPage) => {
         this.setState({
             loading:true
         })
-        selectedClassTeacher(teacherId,currentPage,"5").then(
+        selectedClassTeacher(localStorage.getItem("teachclass"),currentPage,"7").then(
             (res) => {
+                if(!res.data.flag && res.data.message === "没有登录，请先登录"){
+                    localStorage.clear();
+                    this.props.history.push('/Student/AllCompanies/ChosenClasses');
+                  }
                 if(res.data.data!==0){
+                    let pagination = {...this.state.pagination};
+                    pagination.total = parseInt(res.data.page) * parseInt(pagination.pageSize);
                     this.setState({
                     dataSource: res.data.data,
-                    loading:false
+                    loading:false,
+                    pagination
                 })
                 }
-                console.log(res);
             },
             (err) => {
                 this.setState({ loading: false })

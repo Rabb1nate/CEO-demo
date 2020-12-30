@@ -2,14 +2,12 @@ import React from 'react'
 import {withRouter} from 'react-router-dom'
 import {message, Button} from 'antd'
 import LoginApi from '../../../until/api/LoginApi'
+import Confirm from "./Comfirm";
 
 const WelcomeTitle = props => {
-  let {userName, userId} = props
+  let {userName, userId, history} = props
   if (!userName) {
     userName = localStorage.getItem('userName')
-    if (!userName) {
-      props.history.replace('/')
-    }
   }
 
   const exit = async () => {
@@ -17,20 +15,36 @@ const WelcomeTitle = props => {
     message.info(res.data.message)
     if (res.data.flag) {
       localStorage.clear()
-      window.location.replace('/')
+      history.replace('/')
     }
   }
 
   return (
-      <div
-        style={{
-          padding: '15px',
-          color: '#fff'
-        }}
+    <div
+      style={{
+        color: '#1890ff',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+      }}
+    >
+      <div style={{fontSize: '17px', textAlign: 'center'}}>CEO {userName}</div>
+      <Confirm
+        render={
+          (onClick, onOk) => {
+            onOk(exit)
+            return (
+              <Button onClick={onClick} type="primary" style={{
+                fontSize: '12px',
+                margin: '10px',
+              }}>退出登陆</Button>
+            )
+          }
+        }
       >
-        <span style={{fontSize: '17px', marginLeft: '10px'}}>CEO  {userName}</span>
-        <Button onClick={exit} type="primary">退出登陆</Button>
-      </div>
+
+      </Confirm>
+    </div>
   )
 }
 export default (withRouter(WelcomeTitle))

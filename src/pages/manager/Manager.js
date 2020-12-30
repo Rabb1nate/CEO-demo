@@ -9,9 +9,10 @@ import {
 import ChoseClass from './view/ChoseClass'
 import ImData from './view/ImData'
 import './style/Nav.css';
-import {  Menu,Button,message } from 'antd';
+import {  Menu,Button,message,notification } from 'antd';
 import LoginApi from '../../until/api/LoginApi'
 import { UserOutlined, VideoCameraOutlined, EditOutlined, OrderedListOutlined } from '@ant-design/icons';
+import changeNav from '../../until/changeNav' ;
 
 class Manager extends Component { 
     constructor(props) {
@@ -37,13 +38,12 @@ class Manager extends Component {
                                     onClick = {this.handleExit}
                                 >退出登录</Button>
                         </div>
-                        <Menu theme="light" mode="inline">
+                        <Menu theme="light" mode="inline" defaultSelectedKeys={[sessionStorage.getItem("count1")||"1"]}>
                             <Menu.Item key="1" icon={<UserOutlined />}>
-                                <Link to="/Manager/ChoseClass">选择班级</Link>
+                                <Link to="/Manager/ChoseClass" onClick={changeNav.bind(this,1,1)}>选择班级</Link>
                             </Menu.Item>
-                            
-                            <Menu.Item key="3" icon={<EditOutlined />}>
-                                <Link to="/Manager/data">导入数据</Link> 
+                            <Menu.Item key="2" icon={<EditOutlined />}>
+                                <Link to="/Manager/data" onClick={changeNav.bind(this,1,2)}>导入数据</Link> 
                             </Menu.Item>
                             
 
@@ -61,7 +61,7 @@ class Manager extends Component {
                             <Route path="/Manager/data">
                                 <ImData/>
                             </Route>
-                            
+                            <Redirect from="/Manager" to="/Manager/ChoseClass" />
                         </Switch>
                     </div>
                     
@@ -100,26 +100,15 @@ class Manager extends Component {
                 }
             },
             (err) => {
-                console.log(err);
+                notification.open({
+                    message: '警告',
+                    placement: "bottomRight",
+                    description:
+                    '请求超时或服务器异常,请检查网络或联系管理员!',
+                });
             }
         )
     }
-    // isLogin = () => {
-    //     setInterval(() => {
-    //         LoginApi.KeepLogin(this.state.userid).then(
-    //         (res) => {
-    //             console.log(1);
-    //             console.log(res);
-    //             if(!res.data.flag){
-    //                 this.props.history.push('/Student/AllCompanies/ChosenClasses');
-    //             }
-    //         },
-    //         (err) => {
-    //             console.log(err);
-    //         }
-    //     )
-    //     },30000); 
-    // }
 }
 
 export default Manager

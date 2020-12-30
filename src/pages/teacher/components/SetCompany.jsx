@@ -5,6 +5,7 @@ import { showConfig, updateConfigCompany } from '../../../until/api/teacherApi'
 
 class SetCompany extends React.Component {
     constructor(props) {
+        localStorage.setItem("setKey",JSON.stringify({key:2,route:'/Teacher/Set/Company'}))
         super(props)
         this.state = {
             title: [{ "title": "老师给普通企业", "name": "companyScore", "value": "" }, { "title": "新闻机构", "name": "newsScore", "value": "" }, { "title": "银行", "name": "bankScore", "value": "" }, { "title": "会计事务所:", "name": "accountScore", "value": "" }, { "title": "工商局", "name": "tradeScore", "value": "" }, { "title": "税务局:", "name": "revenueScore", "value": "" }, { "title": "老师给机构", "name": "agencyScore", "value": "" }, { "title": "企业互评给机构", "name": "fromCompanyScore", "value": "" }],
@@ -60,6 +61,10 @@ class SetCompany extends React.Component {
     }
     componentDidMount() {
         showConfig(this.state.teachclass).then(rs => {
+            if(!rs.data.flag && rs.data.message === "没有登录，请先登录"){
+                localStorage.clear();
+                this.props.history.push('/Student/AllCompanies/ChosenClasses');
+              }
             console.log(rs);
             if (rs.data.flag === true) {
                 let res = rs.data.data
@@ -102,6 +107,10 @@ class SetCompany extends React.Component {
     }
     submit = () => {
         updateConfigCompany(this.state.title[0].value,this.state.title[1].value,this.state.title[2].value,this.state.title[3].value,this.state.title[4].value,this.state.title[5].value,this.state.title[6].value,this.state.title[7].value,this.state.teachclass).then(rs => {
+            if(!rs.data.flag && rs.data.message === "没有登录，请先登录"){
+                localStorage.clear();
+                this.props.history.push('/Student/AllCompanies/ChosenClasses');
+              }
             if (rs.data.flag === true) {
                 notification.open({
                     message: '提示',

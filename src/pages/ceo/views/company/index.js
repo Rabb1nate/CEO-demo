@@ -1,4 +1,6 @@
 import React, {useState, useEffect, useReducer, memo} from 'react'
+import {PAGE_SIZE} from "../application/consts/constants";
+import Lists from '../../components/Lists'
 import {Card, PageHeader, Button, Modal, Input, Radio, Divider, message, List, Checkbox} from "antd";
 import {
   setPosition as requestSetPos,
@@ -32,6 +34,8 @@ const companyTypes = [
   '税务局'
 ]
 
+let cancel = () => {}
+
 const reducer = (state, action) => {
   const {payload, type} = action
   switch (type) {
@@ -64,6 +68,40 @@ const reducer = (state, action) => {
   }
 }
 
+const mockMembers = [
+  {
+    "id": 985,
+    "ceoId": 0,
+    "userName": "甘雅婷",
+    "studentId": "2016211032",
+    "companyName": "第一贸易企业",
+    "position": "ceo",
+    "teacherId": "1",
+    "personalScore": 10,
+    "academy": "信息管理与信息系统"
+  }, {
+    "id": 985,
+    "ceoId": 0,
+    "userName": "甘雅婷",
+    "studentId": "2016211032",
+    "companyName": "第一贸易企业",
+    "position": "ceo",
+    "teacherId": "1",
+    "personalScore": 10,
+    "academy": "信息管理与信息系统"
+  }, {
+    "id": 985,
+    "ceoId": 0,
+    "userName": "甘雅婷",
+    "studentId": "2016211032",
+    "companyName": "第一贸易企业",
+    "position": "ceo",
+    "teacherId": "1",
+    "personalScore": 10,
+    "academy": "信息管理与信息系统"
+  }
+]
+
 function Company(props) {
   const {userId} = props
 
@@ -93,7 +131,7 @@ function Company(props) {
         dispatch({
           type: 'SET_MEMBER_STATE',
           payload: res.data
-          // payload: mockData
+          // payload: mockMembers
         })
       }
     )
@@ -146,7 +184,13 @@ function Company(props) {
       return
     }
     const res = await createCompanyImpl(userId, companyName, companyType)
-    message.info(res.msg ? res.msg : res.message)
+    if (!res) return
+    if (res.flag) {
+      message.success('创建公司成功')
+      cancel()
+    } else {
+      message.warn(res.message || '数据库异常')
+    }
   }
 
   /* UI组件 */
@@ -154,26 +198,40 @@ function Company(props) {
     return (
       <Card
         key={member.id}
-        title={member.userName}
         hoverable={true}
-        className="card"
       >
-        <ul style={{
-          listStyle: 'none',
-          padding: '0',
-          margin: '10px 0'
+        <div style={{fontSize: '16px'}}>{member.userName}</div>
+        <div style={{
+          display: 'flex', justifyContent: 'space-between',
+          margin: '15px 0', alignItems: 'flex-end', fontSize: '16px'
         }}>
-          <li> {member.companyName}</li>
-          <li> {member.studentId}</li>
-          <li>专业 {member.academy}</li>
-          <li> {member.position || "无职位"}</li>
-          <li>分数：{member.personalScore}</li>
-        </ul>
-        <Button
-          type={"primary"}
-          shape="round"
-          onClick={openPosition.bind(null, member.id)}
-        >设置</Button>
+          <div>
+            <div className="row">
+              <span className="dscr">专业</span>{member.academy}</div>
+            <div className="row">
+              <span className="dscr">学号</span>{member.studentId}</div>
+          </div>
+          <div>
+            <div className="row">
+              <span className="dscr">职位</span>{member.position || "无职位"}</div>
+            <div className="row">
+              <span className="dscr">分数</span>{member.personalScore}</div>
+          </div>
+        </div>
+        <footer style={{
+          display: 'flex', justifyContent: 'space-between'
+        }}>
+          <Button
+            type={"primary"}
+            shape="round"
+            onClick={openPosition.bind(null, member.id)}
+          >设置职位</Button>
+          <Button
+            type="primary"
+            shape="round"
+          >为他投票</Button>
+        </footer>
+
       </Card>
     )
   }
@@ -204,25 +262,15 @@ function Company(props) {
       <Card
         hoverable={true}
         style={{margin: '15px'}}>
-        {
-          state.companyName
-            ? <MyCompany companyName={state.companyName}/>
-            : (<div>你还没有创建公司</div>)
-        }
+        <MyCompany/>
       </Card>
 
-      <PageHeader title="成员" subTitle="member"/>
-      <div className="member">
-        {
-          state.members
-            ? (
-              state.members?.length
-                ? state.members.map(member => <Member key={member.id} member={member}/>)
-                : <NoMember/>
-            )
-            : <LoadingMember/>
-        }
-      </div>
+      <PageHeader title="成员"/>
+      <Lists
+        column={3}
+        dataSource={state.members}
+        render={item => <Member member={item}/>}
+      />
       <Modal
         visible={visible}
         onCancel={() => {
@@ -235,7 +283,6 @@ function Company(props) {
         }}>
           <PageHeader
             title="职位"
-            subTitle="position"
             style={{padding: '16px 0'}}
           />
           {
@@ -264,14 +311,14 @@ function Company(props) {
         </Button>
       </Modal>
 
-      <PageHeader title="所有公司" subTitle="all company"/>
+      <PageHeader title="所有公司"/>
       <List
         style={{padding: '15px'}}
         dataSource={state.companies || []}
         grid={{column: 4}}
         loading={loading}
         pagination={{
-          pageSize: state.pageSize || 7,
+          pageSize: state.pageSize || PAGE_SIZE,
           total: state.companyTotal || 0
         }}
         renderItem={(company, i) => {
@@ -286,7 +333,10 @@ function Company(props) {
         style={{margin: '15px'}}>
         <WithModal
           render={
-            (close) => <Button {...close}>创建公司</Button>
+            (props, onCancel) => {
+              cancel = onCancel
+              return (<Button {...props}>创建公司</Button>)
+            }
           }
         >
           <Input placeholder="公司名" onChange={e => setCompanyName(e.target.value)}/>

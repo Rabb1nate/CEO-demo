@@ -1,4 +1,4 @@
-import {Button, List} from "antd";
+import {Button} from "antd";
 import React, {memo} from "react";
 
 const ApplicationItem = (props) => {
@@ -25,11 +25,6 @@ const ApplicationItem = (props) => {
                   type="primary" shape="round"
                   onClick={handleAgree.bind(null, info.studentId, info.companyName)}
                 >同意</Button>
-                {/*<Button*/}
-                {/*  type="primary" danger={true}*/}
-                {/*  shape="round"*/}
-                {/*  onClick={handleReject.bind(null, item.studentId)}*/}
-                {/*>拒绝</Button>*/}
               </>
             )
             : <div className="status pass">已同意</div>

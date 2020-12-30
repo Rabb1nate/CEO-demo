@@ -55,6 +55,10 @@ Service.interceptors.response.use(response => {
       response.data.message = message
     }
   }
+  if (response.data.message === '没有登录，请先登录') {
+    localStorage.clear()
+    window.location.replace('/')
+  }
   return response
 }, error => {
   error.data = {}

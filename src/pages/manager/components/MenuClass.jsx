@@ -10,7 +10,7 @@ import {
 import AddClass from './AddClass'
 import  DeleteClass  from './/DeleteClass'
 import ChoseClass from './ChoseTeacher'
-import ManagerApi from '../../../until/api/ManagerApi';
+import ManagerApi from '../../../until/api/managerApi';
 
 class MenuClass extends Component{
     constructor(props){
@@ -39,10 +39,10 @@ class MenuClass extends Component{
                         <div>
                             <span className="chose-top">选择班级</span>
                             <span className="chose-name">{this.state.teacherName}</span>
-                            <Button type="primary" onClick={this.toChoseClass}>更改班级</Button>
+                            <Button type="primary" onClick={this.toChoseClass} style={{marginRight:"10px",marginLeft:"10px"}}>更改班级</Button>
                             <Button type="primary" onClick={this.handlebtnChange} loading={this.state.loading}>{this.state.btucontent}</Button>
                         </div>
-                        <Menu theme="light"  mode="horizontal"  defaultSelectedKeys={this.state.key}>
+                        <Menu theme="light"  mode="horizontal"  defaultSelectedKeys={[sessionStorage.getItem("count")||"1"]}>
                             <Menu.Item key = "1" onClick={(item) => {this.changeBtnContent(item)}}>
                                 <Link to="/Manager/ChoseClass/MenuClass/addClass">选择班级</Link>
                             </Menu.Item>
@@ -80,8 +80,6 @@ class MenuClass extends Component{
             teacherName:teachername,
             key:localStorage.getItem("count")
         },() => {
-            console.log(this.state.teacherId);
-            console.log(this.state.key);
         if(this.state.key == 2){
             this.setState({
                 btucontent:"删除班级"
@@ -96,17 +94,18 @@ class MenuClass extends Component{
     }
     //改变按钮
     changeBtnContent = (item) => {
-        if(item.key==1){
+
+        if(item.key == 1){
             this.setState({
                 btucontent:"添加班级"
             })
-            localStorage.setItem("count",item.key)
+            sessionStorage.setItem("count",item.key)
         }
-        else if(item.key==2){
+        else if(item.key == 2){
             this.setState({
                 btucontent:"删除班级"
             })
-            localStorage.setItem("count",item.key)
+            sessionStorage.setItem("count",item.key)
         }
     }
 
@@ -127,7 +126,10 @@ class MenuClass extends Component{
         })
         ManagerApi.addClass(list).then(
             (res) => {
-                console.log(res);
+                if(!res.data.flag && res.data.message === "没有登录，请先登录"){
+                    localStorage.clear();
+                    this.props.history.push('/Student/AllCompanies/ChosenClasses');
+                  }
                 if(res.data.flag){
                     message.success("添加成功",1);
                     this.setState({
@@ -147,6 +149,10 @@ class MenuClass extends Component{
         })
         ManagerApi.deleteClass(list).then(
             (res) => {
+                if(!res.data.flag && res.data.message === "没有登录，请先登录"){
+                    localStorage.clear();
+                    this.props.history.push('/Student/AllCompanies/ChosenClasses');
+                  }
                 if(res.data.flag){
                     message.success("删除成功",1);
                     this.setState({
@@ -154,22 +160,18 @@ class MenuClass extends Component{
                         loading:false
                     })
                 }
-                console.log(res);
             },
             (err) => {
-                console.log(err);
+                message.error("删除失败",1)
             })
     }
     handlebtnChange = () => {
         if(this.state.btucontent == "添加班级"){
-            console.log("add");
             this.addClass(this.state.List);
         }
         else if(this.state.btucontent == "删除班级")
         {
-            console.log("delete");
             this.deleteClass(this.state.List)
-
         }
     }
 

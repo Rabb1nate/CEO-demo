@@ -1,13 +1,14 @@
-import React, {memo, useEffect, useReducer, useState} from 'react'
+import React, {memo, useEffect, useReducer} from 'react'
 
-import {showApplication, agreeApplication, downloadFile, fetchFileList} from "../../../../until/api/ceo";
-
-import FileList from './components/FileList'
+import {showApplication, agreeApplication} from "../../../../until/api/ceo";
+import Lists from "../../components/Lists";
+import FileList from '../file/components/FileList'
 import ApplicationItem from "./components/ApplicationItem";
-
-import {Card, PageHeader, Button, List, message} from "antd";
-import {PAGE_SIZE, SET_PAGE, INIT_PAGE, SET_CURR_PAGE, LOADING} from "./consts/constants";
+import Uploader from "../file/components/Uploader";
+import {Card, PageHeader, List, message} from "antd";
+import {PAGE_SIZE, SET_PAGE, INIT_PAGE, SET_CURR_PAGE, LOADING, MARK_STATE} from "./consts/constants";
 import './style/application.scss'
+import MyTable from "../../components/MyTable";
 
 const reducer = (state, {type, payload}) => {
   switch (type) {
@@ -22,6 +23,7 @@ const reducer = (state, {type, payload}) => {
     case SET_CURR_PAGE:
       return {...state, currentPage: payload, loading: false}
     case INIT_PAGE:
+      payload.object?.forEach((item, i) => item.key = i)
       return {
         ...state,
         total: payload.totalNumber,
@@ -29,17 +31,20 @@ const reducer = (state, {type, payload}) => {
         data: payload.object,
         pageSize: payload.pageSize || PAGE_SIZE
       }
+    case MARK_STATE:
+      const newState = state.slice()
+      newState.data[payload] = '已同意'
+      return {...state, state: newState}
   }
 }
 
 function Application(props) {
-  const {userId} = props
+  const {userId, teachclass} = props
   const [state, dispatch] = useReducer(reducer, {
     currentPage: 0,
     loading: true,
     data: [],
     pageSize: 0,
-    fileList: []
   })
 
   useEffect(() => {
@@ -54,36 +59,72 @@ function Application(props) {
     )
   }, [])
 
-  const handleAgree = (studentId, companyName) => {
-    agreeApplication(userId, studentId, companyName)
+  const handleAgree = async (studentId, companyName, idx) => {
+    const res = await agreeApplication(userId, studentId, companyName)
+    if (res && res.flag) {
+      message.success('已同意')
+      dispatch({
+        type: MARK_STATE,
+        payload: idx
+      })
+    } else {
+      message.info(res.message || "请求失败")
+    }
   }
-  console.log(state)
   return (
     <div>
-      <PageHeader title="所有申请" subTitle="all application"/>
-      <List
+      <PageHeader title="所有申请"/>
+      {/*<Lists*/}
+      {/*  dataSource={state.data}*/}
+      {/*  render={item => (*/}
+      {/*    <Card*/}
+      {/*      hoverable*/}
+      {/*      style={{margin: '10px'}}*/}
+      {/*      title={item.companyName || '无名'}*/}
+      {/*    >*/}
+      {/*      <List.Item>*/}
+      {/*        <ApplicationItem handleAgree={handleAgree} info={item}/>*/}
+      {/*      </List.Item>*/}
+      {/*    </Card>*/}
+      {/*  )}*/}
+      {/*/>*/}
+      <MyTable
         dataSource={state.data}
-        grid={{column: 4}}
-        loading={state.loading}
-        pagination={{
-          pageSize: state.pageSize || 8,
-          total: state.total,
-        }}
-        renderItem={item => (
-          <Card
-            hoverable
-            style={{margin: '10px'}}
-            title={item.companyName || '无名'}
-          >
-            <List.Item>
-              <ApplicationItem handleAgree={handleAgree} info={item}/>
-            </List.Item>
-          </Card>
-        )}
+        columns={[
+          {
+            title: '申请人',
+            dataIndex: 'studentName'
+          }, {
+            title: '学院',
+            dataIndex: 'academy'
+          }, {
+            title: '状态',
+            dataIndex: 'state',
+            render(text, record) {
+              const {state} = record
+              return (
+                <span
+                  className={state === '已同意' ? 'status pass' : 'status'}
+                >{state}</span>
+              )
+            }
+          }, {
+            title: '班级',
+            dataIndex: 'teachclass'
+          }, {
+            title: '操作',
+            dataIndex: 'action',
+            render(text, record) {
+              const {studentId, companyName, state} = record
+              return (
+                state !== '已同意'
+                  ? <a onClick={handleAgree.bind(null, studentId, companyName)}>同意</a>
+                  : <span>已同意</span>
+              )
+            }
+          }
+        ]}
       />
-
-      <PageHeader title="文件"/>
-      <FileList list={state.fileList}/>
     </div>
   )
 }

@@ -28,6 +28,7 @@ import {
   EditOutlined,
   OrderedListOutlined,
   AuditOutlined,
+  ExclamationCircleOutlined,
 } from '@ant-design/icons';
 import CEO from './CEO';
 
@@ -50,12 +51,14 @@ class Student extends Component {
       userId: '',
       password: '',
       chooseType: '老师',
-      loginVisible:false
+      loginVisible:false,
+      b_loading:false,
     }
     this.exit = this.exit.bind(this)
     this.loginClick = this.loginClick.bind(this)
     this.userIdchange = this.userIdchange.bind(this)
     this.passwordchange = this.passwordchange.bind(this)
+    this.confirm = this.confirm.bind(this)
   }
   shouldComponentUpdate(nextProps, nextState) {
     if (nextProps !== this.props || nextState!== this.state) {
@@ -87,7 +90,7 @@ class Student extends Component {
     })
   }
   exit = () => {
-    this.props.Exit()
+    this.props.Exit(this)
   }
 
 
@@ -95,7 +98,7 @@ class Student extends Component {
 
     if (this.state.userId !== "" && this.state.password !== "") {
       // this.props.login(this.state.userId, this.state.password, this.state.chooseType)
-      this.props.login(this.state.userId, Encrypto(this.state.password), this.state.chooseType)
+      this.props.login(this.state.userId, Encrypto(this.state.password), this.state.chooseType,this)
 
 
       // window.location="/CEO"
@@ -127,13 +130,38 @@ class Student extends Component {
       password: value,
     })
   }
+  confirm(that) {
+    Modal.confirm({
+      title: '提示',
+      icon: <ExclamationCircleOutlined />,
+      content: '确定要退出？',
+      onOk: () => {
+        that.props.Exit(this)
+      },
+      okText: '确认',
+      cancelText: '取消',
+    })
+  }
   UNSAFE_componentWillUpdate(newProps,newState){
     // this.setState()
+    try{
+      if(newProps.isLoginFail === true){
+        this.setState({
+          b_loading:false,
+        })
+      }
+    }
+    catch{
+    }
     if(newProps.isLogin!==this.props.isLogin){
       try{
         if(newProps.message){
-          if(newProps.isLogin === true && newProps.payload === undefined )
-          message.success(newProps.message)
+          if(newProps.isLogin === true && newProps.payload === undefined ){
+            message.success(newProps.message)
+            this.setState({
+              b_loading:false,
+            })
+          }
         }
       }
       catch{
@@ -206,7 +234,8 @@ class Student extends Component {
               marginLeft: 300,
             }}>
             <Header className="site-layout-background" style={{ padding: 0 }}>
-              <Button className="login" type="primary" onClick={this.showModal}>登录</Button>
+            <p className="introduce">仿真辅助系统</p>
+              <Button className="exit" type="primary" onClick={this.showModal}>登录</Button>
               <Modal
                 title="登录"
                 visible={this.state.visible}
@@ -223,6 +252,7 @@ class Student extends Component {
                     <Button
                       type="primary"
                       onClick={this.loginClick}
+                      loading={this.state.b_loading}
                     >登录</Button>
                   </Popover>
 
@@ -246,16 +276,13 @@ class Student extends Component {
                       onChange={this.passwordchange}
                     />
                   </div>
-                  <Radio.Group
+                  <Radio.Group className="select_Type"
                     options={options}
                     onChange={this.onChange3}
                     value={this.state.chooseType}
                     optionType="button"
                   />
                   <br />
-                  <br />
-                  <Button style={{ width:90 ,  }}>
-      </Button>
                 </div>
               </Modal>
             </Header>
@@ -313,11 +340,10 @@ class Student extends Component {
               marginLeft: 300,
             }}>
             <Header className="site-layout-background Head" style={{ padding: 0 }}>
-
-          <p className="Name">欢迎你，{localStorage.getItem("userName")}</p>
-              <Button className="login" type="primary" onClick={this.exit}>
+              <p className="introduce">仿真辅助系统</p>
+              <Button className="exit" type="primary" onClick={this.confirm.bind(this,this)}>
                 退出登陆</Button>
-
+                <p className="Name">欢迎你，{localStorage.getItem("userName")}</p>
             </Header>
             <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
               <div className="site-layout-background" style={{ padding: 24, textAlign: 'center', borderRadius: 10 }}>
@@ -331,7 +357,7 @@ class Student extends Component {
                 </Switch>  
               </div>
             </Content>
-            <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+            <Footer style={{ textAlign: 'center' }}>版权所有 极客工作室</Footer>
           </Layout>
         </Layout>
       );
@@ -340,17 +366,23 @@ class Student extends Component {
 }
 const mapDispatchToProps = (dispatch) => {
   return {
-    login: (userId, password, type) => {
+    login: (userId, password, type,that) => {
       const action = actions.loginAction(userId, password, type)
       dispatch(action)
+      that.setState({
+        b_loading:true,
+      })
     },
     Login_Check: () => {
 
       dispatch(actions.Login_Check())
     },
-    Exit: () => {
+    Exit: (that) => {
 
       dispatch(actions.Exit())
+      that.setState({
+        b_loading:true,
+      })
     }
   }
 }

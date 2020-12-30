@@ -14,7 +14,6 @@ export default function* defSaga() {
   yield throttle(2000, 'login', function* () {
     const action = yield select();
     const res = yield call(LoginApi.Login, action.payload)
-    console.log(res)
     if (res.status === 200 && res.data.flag)
     {        
       if(action.payload.studentId!==undefined){
@@ -221,7 +220,7 @@ export default function* defSaga() {
       yield put(actions.ShowCompanyMember_NO())
     }
   })
-  yield takeEvery('Runscore', function* () {
+  yield takeEvery('RunScore', function* () {
     const action = yield select()
     const res = yield call(StudentApi.RunScore,action.payload)
     if (res.status === 200 && res.data.flag) {
@@ -237,7 +236,6 @@ export default function* defSaga() {
   yield takeEvery('ShowNumber', function* () {
     const action = yield select()
     const res = yield call(StudentApi.ShowNumber,action.payload)
-    console.log(res)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.ShowNumber_OK(res.data))
     }
@@ -246,6 +244,33 @@ export default function* defSaga() {
     }
     else{
       yield put(actions.ShowNumber_NO())
+    }
+  })
+  yield takeEvery('ShowScore', function* () {
+    const action = yield select()
+    const res = yield call(StudentApi.ShowScore,action.payload)
+    // if (res.status === 200 && res.data.flag) {
+    if (res.status === 200 ) {
+      yield put(actions.ShowScore_OK(res.data))
+    }
+    else if (!res.data.flag && res.data.message === "没有登录，请先登录"){
+      yield put(actions.Exit(localStorage.getItem("userId")))
+    }
+    else{
+      yield put(actions.ShowScore_NO())
+    }
+  })
+  yield takeEvery('ShowCompany', function* () {
+    const action = yield select()
+    const res = yield call(StudentApi.ShowCompany,action.payload)
+    if (res.status === 200 && res.data.flag) {
+      yield put(actions.ShowCompany_OK(res.data))
+    }
+    else if (!res.data.flag && res.data.message === "没有登录，请先登录"){
+      yield put(actions.Exit(localStorage.getItem("userId")))
+    }
+    else{
+      yield put(actions.ShowCompany_NO())
     }
   })
   /* CEO */

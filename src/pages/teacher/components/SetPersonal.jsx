@@ -4,6 +4,7 @@ import '../../../static/style/teacherStyle.scss'
 import { showConfig, updateConfigMember } from '../../../until/api/teacherApi'
 class SetPersonal extends React.Component {
     constructor(props) {
+        localStorage.setItem("setKey",JSON.stringify({key:1,route:'/Teacher/Set/Person'}))
         super(props)
         console.log(props);
         this.state = {
@@ -14,7 +15,7 @@ class SetPersonal extends React.Component {
     }
     render() {
         let list = this.state.title.map((item, index) => {
-            return (<div className="item">
+            return (<div className="item"  key = {index}>
                 <span className="name">{item.title}打分占比:</span>
                 <InputNumber min={0} max={1} step={0.1} value={item.value} onChange={(number) => this.change(number, index)} />
             </div>)
@@ -31,6 +32,10 @@ class SetPersonal extends React.Component {
     }
     componentDidMount() {
         showConfig(this.state.teachclass).then(rs => {
+            if(!rs.data.flag && rs.data.message === "没有登录，请先登录"){
+                localStorage.clear();
+                this.props.history.push('/Student/AllCompanies/ChosenClasses');
+              }
             console.log(rs);
             if (rs.data.flag === true) {
                 let res = rs.data.data
@@ -66,6 +71,10 @@ class SetPersonal extends React.Component {
     submit = () => {
         console.log(this.state.memberScore);
         updateConfigMember(this.state.title[0].value, this.state.title[1].value, this.state.title[2].value,this.state.teachclass).then(rs => {
+            if(!rs.data.flag && rs.data.message === "没有登录，请先登录"){
+                localStorage.clear();
+                this.props.history.push('/Student/AllCompanies/ChosenClasses');
+              }
             if (rs.data.flag === true) {
                 notification.open({
                     message: '提示',

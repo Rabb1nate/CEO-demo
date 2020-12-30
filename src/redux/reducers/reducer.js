@@ -12,7 +12,9 @@ export default (state = newstate, action) => {
     ApplicationData:state.ApplicationData,
     FileData:state.FileData,
     MemberData:state.MemberData,
-    NumberData:state.NumberData
+    NumberData:state.NumberData,
+    ScoreData:state.ScoreData,
+    MyCompanyData:state.MyCompanyData
   }
   switch (action.type) {
     case "getAllCompanies":
@@ -24,7 +26,7 @@ export default (state = newstate, action) => {
     case "Login_Success":
       return {isLogin: true, ...action.payload.data, };
     case "Login_Fail":
-      return {isLogin: false, ...action.payload, };
+      return {isLoginFail: true,isLogin: false, ...action, };
     case "Login_Check_OK":
       return {isLogin: true, ...data,...action.payload, };
     case "Login_Check_NO":
@@ -99,7 +101,7 @@ export default (state = newstate, action) => {
     case "RunScore":
       return {isLogin:state.isLogin,...data, ...action}
     case "RunScore_OK":
-      return {isRunScore:true, isLogin:state.isLogin,...data, MemberData:action.payload.data}
+      return {isRunScore:true, isLogin:state.isLogin,...data, ...action.payload}
     case "RunScore_NO":
       return {isRunScore:false, ...data,isLogin:state.isLogin, ...action.payload}
     case "ShowNumber":
@@ -108,6 +110,18 @@ export default (state = newstate, action) => {
       return {isShowNumber:true, isLogin:state.isLogin,...data, NumberData:action.payload.data}
     case "ShowNumber_NO":
       return {isShowNumber:false, ...data,isLogin:state.isLogin, ...action.payload}
+    case "ShowScore":
+      return {isLogin:state.isLogin,...data, ...action}
+    case "ShowScore_OK":
+      return {isShowScore:true, isLogin:state.isLogin,...data, ScoreData:action.payload.data}
+    case "ShowScore_NO":
+      return {isShowScore:false, ...data,isLogin:state.isLogin, ...action.payload}
+    case "ShowCompany":
+      return {isLogin:state.isLogin,...data, ...action}
+    case "ShowCompany_OK":
+      return {isShowCompany:true, isLogin:state.isLogin,...data, MyCompanyData:action.payload.data}
+    case "ShowCompany_NO":
+      return {isShowCompany:false, ...data,isLogin:state.isLogin, ...action.payload}
     case "Exist" :
       return {...data,...action,isLogin:state.isLogin}
     case "CEO_SET_MEMBER":
