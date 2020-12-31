@@ -26,6 +26,11 @@ class Detail extends Component {
     UNSAFE_componentWillUpdate(newProps,newState){
       if(newProps!==this.props){
         try{
+          if(newProps.Exist===true){
+            this.setState({
+              loading:false
+            })
+          }
           if(newProps.isShowFile===true){
             this.setState({
               loading:false
@@ -64,6 +69,9 @@ class Detail extends Component {
       }
       if(this.props.FileData){
         this.props.Exist()
+        this.setState({
+          loading:false
+        })
       }
     }
     shouldComponentUpdate(nextProps, nextState) {

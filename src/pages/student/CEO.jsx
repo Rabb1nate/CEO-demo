@@ -68,6 +68,9 @@ class CEO extends Component {
       }
       if(this.props.CeoData){
         this.props.Exist()
+        this.setState({
+          loading:false
+        })
       }
     }
     shouldComponentUpdate(nextProps, nextState) {

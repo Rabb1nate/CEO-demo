@@ -125,7 +125,7 @@ export default (state = newstate, action) => {
     case "ShowCompany_NO":
       return {isShowCompany:false, ...data,isLogin:state.isLogin, ...action.payload}
     case "Exist" :
-      return {...data,...action,isLogin:state.isLogin}
+      return {...data,...action,isLogin:state.isLogin,Exist:true}
     case "CEO_SET_MEMBER":
       return {
         ...state,

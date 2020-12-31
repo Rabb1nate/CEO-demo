@@ -22,6 +22,11 @@ class Join extends Component {
     UNSAFE_componentWillUpdate(newProps,newState){
       if(newProps!==this.props){
         try{
+          if(newProps.Exist===true){
+            this.setState({
+              loading:false
+            })
+          }
           if(newProps.isShowApplication===true){
             this.setState({
               loading:false
@@ -53,6 +58,9 @@ class Join extends Component {
       }
       if(this.props.ApplicationData){
         this.props.Exist()
+        this.setState({
+          loading:false
+        })
       }
     }
     shouldComponentUpdate(nextProps, nextState) {

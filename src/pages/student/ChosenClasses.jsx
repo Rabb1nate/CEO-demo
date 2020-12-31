@@ -19,6 +19,11 @@ class ChosenClasses extends Component {
       // this.setState()
       if(newProps!==this.props){
         try{
+          if(newProps.Exist===true){
+            this.setState({
+              loading:false
+            })
+          }
           if(newProps.isgetAllCompanies===true){
             this.setState({
               loading:false
@@ -55,6 +60,9 @@ class ChosenClasses extends Component {
       }
       if(this.props.CompanyData){
         this.props.Exist()
+        this.setState({
+          loading:false
+        })
       }
     }
     shouldComponentUpdate(nextProps, nextState) {

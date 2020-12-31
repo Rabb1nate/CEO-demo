@@ -47,6 +47,11 @@ class CompanyMember extends Component {
           //     loading:false
           //   })
           // }
+          if(newProps.Exist===true){
+            this.setState({
+              loading:false
+            })
+          }
           if( newProps.isRunScore === true && !newProps.message){
             message.success("打分成功")
             this.setState({
@@ -102,6 +107,9 @@ class CompanyMember extends Component {
       }
       if(this.props.MemberData){
         this.props.Exist()
+        this.setState({
+          loading:false
+        })
       }
     }
     shouldComponentUpdate(nextProps, nextState) {
