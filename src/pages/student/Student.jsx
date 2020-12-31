@@ -19,6 +19,7 @@ import {
   Radio,
   message,
   Popover,
+  Form
 } from 'antd'
 import actions from '../../redux/actionCreators/creators'
 
@@ -31,18 +32,24 @@ import {
   ExclamationCircleOutlined,
 } from '@ant-design/icons';
 import CEO from './CEO';
-
+const layout = {
+  labelCol: { span: 8 },
+  wrapperCol: { span: 16 },
+};
+const tailLayout = {
+  wrapperCol: { offset: 8, span: 16 },
+};
 
 const { Header, Content, Footer, Sider } = Layout;
 const options = [
   { label: '老师/管理员', value: '老师' },
   { label: '学生/CEO', value: '学生' },
-];
+]
 const content = (
   <div>
     <p>请补全账号和密码</p>
   </div>
-);
+)
 class Student extends Component {
   constructor(props) {
     super(props);
@@ -92,24 +99,24 @@ class Student extends Component {
   exit = () => {
     this.props.Exit(this)
   }
+  onFinish = values => {
 
+        // this.props.login(this.state.userId, this.state.password, this.state.chooseType)
+        this.props.login(values.username, Encrypto(values.password), this.state.chooseType,this)
+  
+  
+        // window.location="/CEO"
+        // this.props.history.push("/CEO")
+      
+
+    }
+  
+  onFinishFailed = errorInfo => {
+    };
 
   loginClick = () => {
 
-    if (this.state.userId !== "" && this.state.password !== "") {
-      // this.props.login(this.state.userId, this.state.password, this.state.chooseType)
-      this.props.login(this.state.userId, Encrypto(this.state.password), this.state.chooseType,this)
 
-
-      // window.location="/CEO"
-      // this.props.history.push("/CEO")
-    }
-    else {
-
-      this.setState({
-        loginVisible: true
-      })
-    }
   }
   onChange3 = e => {
 
@@ -199,6 +206,7 @@ class Student extends Component {
     if (!this.props.isLogin)
 
       return (
+        
         <Layout>
           <Sider
             style={{
@@ -243,22 +251,46 @@ class Student extends Component {
                 okText="登录"
                 onCancel={this.handleCancel}
                 footer={
-                  <Popover
-                    content={<a onClick={this.hide}>确定</a>}
-                    title="账号和密码不能为空"
-                    trigger="click"
-                    visible={this.state.loginVisible}
-                    disabled={true}>
+
                     <Button
                       type="primary"
-                      onClick={this.loginClick}
                       loading={this.state.b_loading}
+                      htmlType='submit'
+                      form='basic'
                     >登录</Button>
-                  </Popover>
 
                 }
+              > <Form 
+              {...layout}
+              name="basic"
+              initialValues={{ remember: true }}
+              onFinish={this.onFinish}
+              onFinishFailed={this.onFinishFailed}
+              className="Login_Form"
+            >
+              <Form.Item
+                label="账号"
+                name="username"
+                rules={[{ required: true, message: '请输入正确的账号!',pattern: new RegExp(/^[1-9]\d*$/, "g")}] }
               >
-                <div className="login_input">
+                <Input />
+              </Form.Item>
+        
+              <Form.Item
+                label="密码"
+                name="password"
+                rules={[{ required: true, message: '密码不能为空!' }]}
+              >
+                <Input.Password />
+              </Form.Item>
+              <Radio.Group className="select_Type"
+                    options={options}
+                    onChange={this.onChange3}
+                    value={this.state.chooseType}
+                    optionType="button"
+                  />
+            </Form>
+                {/* <div className="login_input">
                   <div>
                     用户名：
       <Input
@@ -283,7 +315,7 @@ class Student extends Component {
                     optionType="button"
                   />
                   <br />
-                </div>
+                </div> */}
               </Modal>
             </Header>
             <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>

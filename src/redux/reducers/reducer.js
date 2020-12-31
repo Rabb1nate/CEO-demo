@@ -21,6 +21,8 @@ export default (state = newstate, action) => {
       return { isLogin:state.isLogin, ...data,  ...action}
     case "getAllCompanies_OK":
       return { isgetAllCompanies:true, isLogin:state.isLogin,  ...data,CompanyData:action.payload.data,}
+    case "getAllCompanies_NO":
+      return { isgetAllCompanies:false, isLogin:state.isLogin,  ...data,CompanyData:action.payload.data,}
     case "login":
       return {   isLogin:state.isLogin,  ...action}
     case "Login_Success":

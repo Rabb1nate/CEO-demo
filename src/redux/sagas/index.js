@@ -225,6 +225,7 @@ export default function* defSaga() {
     const res = yield call(StudentApi.RunScore,action.payload)
     if (res.status === 200 && res.data.flag) {
       yield put(actions.RunScore_OK(res.data.message))
+      yield put(actions.ShowScore(localStorage.getItem("userId")))
     }
     else if (!res.data.flag && res.data.message === "没有登录，请先登录"){
       yield put(actions.Exit(localStorage.getItem("userId")))

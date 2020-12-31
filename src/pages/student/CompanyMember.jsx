@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { Table,  Space,   message, Button, Empty , Modal, Input, } from 'antd';
+import { Table,  Space,   message, Button, Empty , Modal, Input, Form} from 'antd';
 import actions from '../../redux/actionCreators/creators'
 import changePage from '../../until/changePage'
 import '../../static/style/style.scss'
+const layout = {
+  labelCol: { span: 8 },
+  wrapperCol: { span: 16 },
+};
+const tailLayout = {
+  wrapperCol: { offset: 8, span: 16 },
+};
 
 class CompanyMember extends Component {
     constructor(props) {
@@ -18,6 +25,7 @@ class CompanyMember extends Component {
             b_loading:false,
             MyCompanyData:'',
             ScoreData:'',
+            disabled:false,
             data : [
               ],
             NumberData:'',
@@ -29,6 +37,16 @@ class CompanyMember extends Component {
     UNSAFE_componentWillUpdate(newProps,newState){
       if(newProps!==this.props){
         try{
+          // if(newProps.isShowCompany===true){
+          //   this.setState({
+          //     loading:false
+          //   })
+          // }
+          // else if(newProps.isShowCompany===false){
+          //   this.setState({
+          //     loading:false
+          //   })
+          // }
           if( newProps.isRunScore === true && !newProps.message){
             message.success("打分成功")
             this.setState({
@@ -39,8 +57,10 @@ class CompanyMember extends Component {
             if( newProps.isRunScore === true ){
               message.success("打分成功")
               this.setState({
-                b_loading:false
+                b_loading:false,
+                disabled:true,
               })
+              
             }
             else if(newProps.isRunScore === false ){
               message.error(newProps.message)
@@ -66,6 +86,7 @@ class CompanyMember extends Component {
             ScoreData:ScoreData,
             loading:false
           })
+
         }
         catch{
 
@@ -114,7 +135,10 @@ class CompanyMember extends Component {
         visible: false,
       })
     }
-    
+    onFinish = values => {
+      this.props.RunScore(values.score,this.state.studentId,this)
+
+  }
     onPageChange (page,pageSize) {
       if (localStorage.getItem("userId")){
         this.props.ShowCompanyMember(localStorage.getItem("userId"))
@@ -179,11 +203,12 @@ class CompanyMember extends Component {
                 break
               }
             }
-            if(record.studentId !== localStorage.getItem("userId") && flag)
+            if(record.studentId !== localStorage.getItem("userId") && flag && this.state.NumberData.level !== 0)
+            // if(record.studentId !== localStorage.getItem("userId") && flag)
             return (
             <Space size="middle">
               <a onClick={this.showModal.bind(this,record.studentId)}>打分</a>
-              <Modal
+              {/* <Modal
                 title="打分"
                 visible={this.state.visible}
                 onOk={this.handleOk}
@@ -193,6 +218,7 @@ class CompanyMember extends Component {
                       type="primary"
                       onClick={this.props.RunScore.bind(this,this.state.score,this.state.studentId,this)}
                       loading={this.state.b_loading}
+                      
                     >确认打分</Button>
 
                 }
@@ -207,6 +233,41 @@ class CompanyMember extends Component {
                     />
                   </div>
                 </div>
+              </Modal> */}
+                <Modal
+                title="打分"
+                visible={this.state.visible}
+                onOk={this.handleOk}
+                okText="确认打分"
+                onCancel={this.handleCancel}
+                footer={
+
+                    <Button
+                      type="primary"
+                      loading={this.state.b_loading}
+                      htmlType='submit'
+                      form='basic'
+                      disabled={this.state.disabled}
+                    >登录</Button>
+
+                }
+              > <Form 
+              {...layout}
+              name="basic"
+              initialValues={{ remember: true }}
+              onFinish={this.onFinish}
+              onFinishFailed={this.onFinishFailed}
+              className="Login_Form"
+            >
+              <Form.Item
+                label="分数"
+                name="score"
+                rules={[{ required: true, message: '请输入正确的分数!' ,pattern: new RegExp(/^[1-9]\d*$/, "g")}]}
+              >
+                <Input />
+              </Form.Item>
+        
+            </Form>
               </Modal>
             </Space>
           )
@@ -232,6 +293,7 @@ class CompanyMember extends Component {
         hideOnSinglePage:true,
     }
     if (localStorage.getItem("userId")){
+     if(this.state.NumberData){
       if(this.state.NumberData.typeCode < 3 && this.state.NumberData.level === 0)
         return ( 
             <div className="table_div">
@@ -256,13 +318,15 @@ class CompanyMember extends Component {
         <Table columns={columns} dataSource={this.state.data} pagination={pagination} loading={this.state.loading}/>
         </div>
         )
-        else return(
-          <div className="table_div">
-          <br/>
+
+     }
+     else return(
+      <div className="table_div">
         <Table columns={columns} dataSource={this.state.data} pagination={pagination} loading={this.state.loading}/>
-        </div>
-        )
+    </div>
+    )
         }
+
         else{
           return ( 
             <div className="table_div">

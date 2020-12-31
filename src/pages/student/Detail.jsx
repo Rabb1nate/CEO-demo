@@ -26,6 +26,16 @@ class Detail extends Component {
     UNSAFE_componentWillUpdate(newProps,newState){
       if(newProps!==this.props){
         try{
+          if(newProps.isShowFile===true){
+            this.setState({
+              loading:false
+            })
+          }
+          else if(newProps.isShowFile===false){
+            this.setState({
+              loading:false
+            })
+          }
           if( newProps.isDeleteFile === true )
           message.success("删除成功")
           if( newProps.message ){
@@ -43,7 +53,6 @@ class Detail extends Component {
             currentPage: parseInt(sessionStorage.getItem("Page4"))||1,
             data:newdata,
             totalNum:totalNumber,
-            loading:false,
           })
         }
         catch{}
@@ -236,7 +245,7 @@ class Detail extends Component {
     if(localStorage.getItem("class"))
         return (
             <div className="table_div">
-              <Button className="RunCeo" type="primary" onClick={this.showModal}>上传</Button>
+              {/* <Button className="RunCeo" type="primary" onClick={this.showModal}>上传</Button> */}
               {/* 如果需要再开启 */}
               <Modal
                 title="上传文件"

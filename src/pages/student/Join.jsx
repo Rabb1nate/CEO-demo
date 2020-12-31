@@ -22,6 +22,16 @@ class Join extends Component {
     UNSAFE_componentWillUpdate(newProps,newState){
       if(newProps!==this.props){
         try{
+          if(newProps.isShowApplication===true){
+            this.setState({
+              loading:false
+            })
+          }
+          else if(newProps.isShowApplication===false){
+            this.setState({
+              loading:false
+            })
+          }
           const {ApplicationData} = newProps
           let newdata = ApplicationData.object
           for (let item in newdata){
@@ -31,7 +41,6 @@ class Join extends Component {
             currentPage: parseInt(sessionStorage.getItem("Page3"))||1,
             data:newdata,
             totalNum:ApplicationData.totalNumber,
-            loading:false,
           })
         
         }

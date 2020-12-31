@@ -21,6 +21,16 @@ class CEO extends Component {
     UNSAFE_componentWillUpdate(newProps,newState){
       if(newProps!==this.props){
         try{
+          if(newProps.isShowCeo===true){
+            this.setState({
+              loading:false
+            })
+          }
+          else if(newProps.isShowCeo===false){
+            this.setState({
+              loading:false
+            })
+          }
           if( newProps.isVoteForCeo === true )
           message.success("投票成功")
           if( newProps.message ){
@@ -46,7 +56,6 @@ class CEO extends Component {
             currentPage: parseInt(sessionStorage.getItem("Page2"))||1,
             data:newdata,
             totalNum:CeoData.totalNumber,
-            loading:false,
           })
         
         }
