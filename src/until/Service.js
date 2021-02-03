@@ -1,7 +1,9 @@
 import axios from 'axios'
+import baseurl from './BaseUrl'
 const Service = axios.create({
-  /*没有被覆盖*/
-  baseURL: 'http://localhost:3000/api',
+/*没有被覆盖*/
+  baseURL:baseurl,
+  // baseURL: 'http://localhost:3000/api',
   headers: {
     get: {
       'Content-Type': 'application/json'

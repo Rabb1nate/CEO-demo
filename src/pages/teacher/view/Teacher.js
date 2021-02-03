@@ -166,7 +166,7 @@ class Teacher extends Component {
             }
         )
     }
-<<<<<<< HEAD
+    //判断是否再登录状态
     // isLogin = () => {
     //     setInterval(() => {
     //         LoginApi.KeepLogin(this.state.userid).then(
@@ -182,24 +182,6 @@ class Teacher extends Component {
     //         }
     //     )
     //     },300000);
-=======
-    //判断是否再登录状态
-    isLogin = () => {
-        setInterval(() => {
-            LoginApi.KeepLogin(this.state.userid).then(
-            (res) => {
-                console.log(1);
-                console.log(res);
-                if(!res.data.flag){
-                    this.props.history.push('/Student/AllCompanies/ChosenClasses');
-                }
-            },
-            (err) => {
-                console.log(err);
-            }
-        )
-        },300000);
->>>>>>> 06dac33ff63670a823af751a61cf4367a7d9b08d
         
     // }
     changeClass = () => {
@@ -207,4 +189,4 @@ class Teacher extends Component {
     }
 }
 
-export default Teacher
+    export default Teacher;
